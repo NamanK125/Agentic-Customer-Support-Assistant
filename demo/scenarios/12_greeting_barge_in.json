@@ -1,0 +1,26 @@
+{
+  "name": "12_greeting_barge_in",
+  "description": "Greeting hook (scripted responder with a `greeting`): the assistant greets as turn 0 on connect; the caller starts 'Hi, where is my order' 0.8 s into the greeting, which must barge in and become turn 1 (greeting interrupted, never merged into the caller's text, no duplicate turn).",
+  "responder": "scripted",
+  "greeting": "Hello, thanks for calling PulseNest support. You can ask about an order, a return, or any of our devices. How can I help you today?",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."
+  ],
+  "reply_latency_ms": 600,
+  "steps": [
+    {
+      "say": "order_status_query",
+      "when": "greeting_audio_start",
+      "delay_ms": 800
+    }
+  ],
+  "expect": {
+    "greeting": "interrupted",
+    "turns": 1,
+    "turns_completed": 1,
+    "barge_in_confirmed": 1,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  }
+}

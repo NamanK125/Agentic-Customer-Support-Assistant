@@ -1,0 +1,32 @@
+{
+  "name": "08_stt_invalid_key",
+  "description": "Resilience (scripted): the primary STT (Groq Whisper) is given an invalid key (non-retryable); the chain must go straight to local faster-whisper and the turn proceeds normally.",
+  "responder": "scripted",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."
+  ],
+  "steps": [
+    {
+      "fault": {
+        "target": "groq-whisper",
+        "mode": "invalid_key"
+      }
+    },
+    {
+      "say": "order_status_query"
+    },
+    {
+      "clear_fault": "groq-whisper"
+    }
+  ],
+  "expect": {
+    "turns": 1,
+    "turns_completed": 1,
+    "stt_providers": "local-whisper",
+    "stt_failed": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  },
+  "reply_latency_ms": 600
+}

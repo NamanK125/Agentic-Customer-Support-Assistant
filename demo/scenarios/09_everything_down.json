@@ -1,0 +1,57 @@
+{
+  "name": "09_everything_down",
+  "description": "Resilience (scripted): (a) every TTS provider refuses: the answer can't be spoken, the pre-rendered 'trouble' prompt plays and the text is logged; (b) every STT provider hangs: the turn is bounded by timeouts and 'didn't catch that' plays; (c) faults cleared: the call recovers. No hang, no crashed turn.",
+  "responder": "scripted",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."
+  ],
+  "config": {
+    "stt_timeout_s": 15.0
+  },
+  "steps": [
+    {
+      "fault": {
+        "target": "tts",
+        "mode": "refuse"
+      }
+    },
+    {
+      "say": "order_status_query"
+    },
+    {
+      "clear_fault": "tts"
+    },
+    {
+      "fault": {
+        "target": "stt",
+        "mode": "hang"
+      }
+    },
+    {
+      "say": "order_status_query"
+    },
+    {
+      "clear_fault": "stt"
+    },
+    {
+      "say": "order_status_query"
+    }
+  ],
+  "expect": {
+    "outcomes": {
+      "contains": "tts_failed"
+    },
+    "stt_failed": 1,
+    "turns_completed": 1,
+    "canned": {
+      "contains": "trouble"
+    },
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0,
+    "max_time_to_resolution_ms": {
+      "<": 20000
+    }
+  },
+  "reply_latency_ms": 600
+}

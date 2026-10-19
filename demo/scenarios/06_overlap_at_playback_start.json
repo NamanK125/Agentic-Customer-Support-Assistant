@@ -1,0 +1,41 @@
+{
+  "name": "06_overlap_at_playback_start",
+  "description": "Adversarial (scripted): (a) the caller starts 'Wait, wrong order' 150 ms after the answer starts; (b) on the next question the caller starts talking the moment the reply is ready, before its first audio. Both must resolve to one barge-in or one merge, never two answers in parallel.",
+  "responder": "scripted",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.",
+    "Got it, order PN-10005. That's the pulse oximeter, delivered twenty days ago by Ecom Express. Is there something wrong with it?",
+    "Order PN-10004 is a blood pressure monitor delivered ten days ago. Since the box was opened, it can still be returned within the window, with a restocking fee. Would you like me to start the return?",
+    "Got it, order PN-10005. That's the pulse oximeter, delivered twenty days ago by Ecom Express. Is there something wrong with it?"
+  ],
+  "steps": [
+    {
+      "say": "order_status_query"
+    },
+    {
+      "say": "wait_wrong_order",
+      "when": "answer_audio_start",
+      "delay_ms": 150
+    },
+    {
+      "say": "return_query"
+    },
+    {
+      "say": "wait_wrong_order",
+      "when": "reply_ready",
+      "delay_ms": 0
+    }
+  ],
+  "expect": {
+    "barge_in_confirmed": {
+      ">=": 2
+    },
+    "turns_answered": {
+      ">=": 3
+    },
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  },
+  "reply_latency_ms": 600
+}

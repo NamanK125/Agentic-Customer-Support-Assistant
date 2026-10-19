@@ -1,0 +1,26 @@
+{
+  "name": "01_silence_full_playback",
+  "description": "Required #1, end to end (pipeline responder): the caller asks about an order and stays silent; the whole answer plays, nothing is ducked or cut. (`replies` are used only when run with --responder scripted.)",
+  "responder": "pipeline",
+  "steps": [
+    {
+      "say": "order_status_query"
+    }
+  ],
+  "expect": {
+    "turns": 1,
+    "turns_completed": 1,
+    "barge_in_confirmed": 0,
+    "ducks": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0,
+    "max_time_to_resolution_ms": {
+      "<": 30000
+    }
+  },
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."
+  ],
+  "reply_latency_ms": 600
+}

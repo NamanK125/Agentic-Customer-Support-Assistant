@@ -1,0 +1,29 @@
+{
+  "name": "03_real_interruption",
+  "description": "Required #3, end to end (pipeline): 'Wait, wrong order. I meant PN-10005.' 1.5 s into the order-status answer must duck, confirm, cut playback, and become exactly one new turn that is answered. (`replies` are used only when run with --responder scripted.)",
+  "responder": "pipeline",
+  "steps": [
+    {
+      "say": "order_status_query"
+    },
+    {
+      "say": "wait_wrong_order",
+      "when": "answer_audio_start",
+      "delay_ms": 1500
+    }
+  ],
+  "expect": {
+    "turns": 2,
+    "barge_in_on_answer": 1,
+    "interrupted": 1,
+    "turns_completed": 1,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  },
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.",
+    "Got it, order PN-10005. That's the pulse oximeter, delivered twenty days ago by Ecom Express. Is there something wrong with it?"
+  ],
+  "reply_latency_ms": 600
+}

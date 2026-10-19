@@ -1,0 +1,28 @@
+{
+  "name": "02_noise_burst_no_interrupt",
+  "description": "Required #2 (scripted responder: isolates barge-in from LLM latency): a 120 ms clap 1.2 s into the answer must not duck or interrupt it.",
+  "responder": "scripted",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."
+  ],
+  "steps": [
+    {
+      "say": "order_status_query"
+    },
+    {
+      "noise": "noise_burst",
+      "when": "answer_audio_start",
+      "delay_ms": 1200
+    }
+  ],
+  "expect": {
+    "turns": 1,
+    "turns_completed": 1,
+    "barge_in_confirmed": 0,
+    "interrupted": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  },
+  "reply_latency_ms": 600
+}

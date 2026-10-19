@@ -1,0 +1,51 @@
+{
+  "name": "10_latency_run",
+  "description": "Latency (pipeline, end to end): 10 ordinary turns, no interruptions, for p50/p95 of end-of-speech -> first audio (filler included) and -> first answer audio. (`replies` are used only when run with --responder scripted.)",
+  "responder": "pipeline",
+  "max_call_s": 1200,
+  "steps": [
+    {
+      "say": "order_status_query"
+    },
+    {
+      "say": "return_query"
+    },
+    {
+      "say": "product_question"
+    },
+    {
+      "say": "order_status_query"
+    },
+    {
+      "say": "talk_to_human"
+    },
+    {
+      "say": "product_question"
+    },
+    {
+      "say": "return_query"
+    },
+    {
+      "say": "order_status_query"
+    },
+    {
+      "say": "product_question"
+    },
+    {
+      "say": "return_query"
+    }
+  ],
+  "expect": {
+    "turns": 10,
+    "turns_completed": 10,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0
+  },
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.",
+    "Order PN-10004 is a blood pressure monitor delivered ten days ago. Since the box was opened, it can still be returned within the window, with a restocking fee. Would you like me to start the return?",
+    "Error E2 on the BP-200 means the cuff is too loose or was not inflated properly. Wrap it snugly, about two fingers' width above the elbow, and measure again."
+  ],
+  "reply_latency_ms": 600
+}

@@ -1,0 +1,49 @@
+{
+  "name": "07_tts_failure_mid_call",
+  "description": "Resilience (scripted): turn 1 normal; turn 2 the in-house TTS stream drops after 2 chunks (mid-sentence) and the chain restarts the sentence on Edge; turn 3 the in-house TTS refuses outright. Every turn still gets spoken audio.",
+  "responder": "scripted",
+  "replies": [
+    "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.",
+    "Order PN-10004 is a blood pressure monitor delivered ten days ago. Since the box was opened, it can still be returned within the window, with a restocking fee. Would you like me to start the return?",
+    "Error E2 on the BP-200 means the cuff is too loose or was not inflated properly. Wrap it snugly, about two fingers' width above the elbow, and measure again."
+  ],
+  "steps": [
+    {
+      "say": "order_status_query"
+    },
+    {
+      "fault": {
+        "target": "inhouse",
+        "mode": "drop_after_chunks:2"
+      }
+    },
+    {
+      "say": "return_query"
+    },
+    {
+      "fault": {
+        "target": "inhouse",
+        "mode": "refuse"
+      }
+    },
+    {
+      "say": "product_question"
+    },
+    {
+      "clear_fault": "inhouse"
+    }
+  ],
+  "expect": {
+    "turns": 3,
+    "turns_completed": 3,
+    "tts_failed": 0,
+    "fallback_used": "edge",
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "coordinator_errors": 0,
+    "max_time_to_resolution_ms": {
+      "<": 15000
+    }
+  },
+  "reply_latency_ms": 600
+}
