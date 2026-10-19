@@ -23,7 +23,7 @@ RawMessage ─► InputGuardrail ─► CheckedMessage ─► Router ─► Hand
 
 | Intent | Handler | What it does |
 |---|---|---|
-| `product_question` | `RagAgent` | Dense retrieval over `kb/`, answers only from cited passages, no answer below a similarity threshold |
+| `product_question` | `RagAgent` | Dense retrieval over `knowledge_base/`, answers only from cited passages, no answer below a similarity threshold |
 | `order_status` | `ToolAgent` | `get_order_status(order_id)` via function calling |
 | `return_refund` | `ToolAgent` | `check_return_eligibility(order_id, ...)`; refund estimates are never stated as confirmed |
 | `escalate_to_human` | `EscalationHandler` | Files a handoff ticket; deterministic, no LLM |

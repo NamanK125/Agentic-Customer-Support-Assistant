@@ -65,7 +65,7 @@ def build_retriever(settings: Settings | None = None) -> DenseRetriever:
     Synchronous: call at startup (it may embed the KB once, a few seconds on CPU).
     """
     s = settings or get_settings()
-    kb_dir = Path(s.kb_dir) if s.kb_dir else REPO_ROOT / "kb"
+    kb_dir = Path(s.kb_dir) if s.kb_dir else REPO_ROOT / "knowledge_base"
     cache_dir = Path(s.rag_cache_dir) if s.rag_cache_dir else REPO_ROOT / ".cache" / "rag"
     embedder = SentenceTransformerEmbedder(s.embedding_model)
     index, _ = load_or_build_index(kb_dir, embedder, cache_dir)

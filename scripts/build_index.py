@@ -19,7 +19,7 @@ def main() -> None:
 
     s = get_settings()
     model = s.embedding_model
-    kb_dir = Path(s.kb_dir) if s.kb_dir else REPO_ROOT / "kb"
+    kb_dir = Path(s.kb_dir) if s.kb_dir else REPO_ROOT / "knowledge_base"
     cache_dir = Path(s.rag_cache_dir) if s.rag_cache_dir else REPO_ROOT / ".cache" / "rag"
     start = time.perf_counter()
     index, rebuilt = load_or_build_index(

@@ -19,7 +19,7 @@ from support_assistant.rag.embedder import HashingEmbedder, SentenceTransformerE
 from support_assistant.rag.index import kb_hash, load_or_build_index
 from support_assistant.rag.retriever import DenseRetriever
 
-KB_DIR = Path(__file__).resolve().parents[2] / "kb"
+KB_DIR = Path(__file__).resolve().parents[2] / "knowledge_base"
 ROUTE = RouteDecision(intent=Intent.PRODUCT_QUESTION, confidence=0.9)
 
 DOC_A = """---

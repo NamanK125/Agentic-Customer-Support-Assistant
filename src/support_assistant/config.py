@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     # Retrieval
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     rag_min_score: float | None = None  # None = per-model calibrated default (rag/retriever.py)
-    kb_dir: str | None = None  # None = <repo>/kb
+    kb_dir: str | None = None  # None = <repo>/knowledge_base
     rag_cache_dir: str | None = None  # None = <repo>/.cache/rag
 
     # Voice: STT (Groq Whisper by default, local faster-whisper int8 as fallback)

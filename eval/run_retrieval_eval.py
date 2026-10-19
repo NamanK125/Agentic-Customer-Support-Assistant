@@ -131,7 +131,7 @@ def main() -> None:
         for line in (ROOT / "eval/data/retrieval_eval.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    chunks = load_kb(ROOT / "kb")
+    chunks = load_kb(ROOT / "knowledge_base")
     n_ans = sum(1 for r in rows if r["relevant_doc_ids"])
     report: dict[str, dict] = {}
 
