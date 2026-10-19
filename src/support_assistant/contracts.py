@@ -39,6 +39,21 @@ class ChatTurn(BaseModel):
     text: str
 
 
+class CallerProfile(BaseModel):
+    """Details the channel collected up front (voice intake asks for them on connect), so a turn
+    doesn't need an extra "which order?" round trip. Both fields are format-constrained, so the
+    profile can't carry free text or instructions; the name is never put into an LLM prompt.
+    Caller-supplied, i.e. as trustworthy as the caller saying it, not identity-verified."""
+
+    model_config = ConfigDict(frozen=True)
+
+    # At most three words: enough for a name, too short to carry a sentence.
+    name: str | None = Field(
+        default=None, max_length=40, pattern=r"^[A-Za-z][A-Za-z.'-]*(?: [A-Za-z][A-Za-z.'-]*){0,2}$"
+    )
+    order_id: str | None = Field(default=None, pattern=r"^PN-\d{5}$")
+
+
 class RawMessage(BaseModel):
     """Untrusted user input as it arrives from any channel."""
 
@@ -48,6 +63,7 @@ class RawMessage(BaseModel):
     text: str
     channel: Literal["text", "voice"] = "text"
     history: tuple[ChatTurn, ...] = ()
+    caller: CallerProfile | None = None
     received_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 

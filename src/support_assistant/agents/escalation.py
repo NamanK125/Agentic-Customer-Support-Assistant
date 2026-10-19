@@ -29,6 +29,7 @@ class HandoffTicket(BaseModel):
     customer_message: str
     route_rationale: str
     order_id: str | None = None
+    caller_name: str | None = None  # from voice intake, so the human doesn't ask again
 
 
 @runtime_checkable
@@ -87,6 +88,7 @@ class EscalationHandler(Handler):
             customer_message=msg.text[:2000],
             route_rationale=route.rationale,
             order_id=route.order_id,
+            caller_name=msg.raw.caller.name if msg.raw.caller else None,
         )
         try:
             await self._store.create(ticket)

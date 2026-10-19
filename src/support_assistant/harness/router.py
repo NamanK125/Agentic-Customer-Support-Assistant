@@ -132,6 +132,7 @@ class LLMRouter:
     async def route(self, msg: CheckedMessage) -> RouteDecision:
         with _tracer.start_as_current_span("router.route") as span:
             history = msg.raw.history
+            known = msg.raw.caller.order_id if msg.raw.caller else None
             context = next((t.text for t in reversed(history) if t.role == "assistant"), "")
             key = make_cache_key(
                 msg.text, context=context, model_id=self._model_id, prompt_version=self.prompt_id()
@@ -152,7 +153,7 @@ class LLMRouter:
                     )
                 except (LLMError, TimeoutError) as exc:
                     span.record_exception(exc)
-                    decision = self._degraded(msg.text, history, type(exc).__name__)
+                    decision = self._degraded(msg.text, history, type(exc).__name__, known)
                     self._annotate(span, decision, degraded=True)
                     return decision
                 try:
@@ -163,7 +164,7 @@ class LLMRouter:
                 if out is not None and self.cache is not None and self._known(out.intent):
                     await self.cache.set(key, out.model_dump_json())
 
-            decision = self._decide(out, msg.text, history, cached=cached)
+            decision = self._decide(out, msg.text, history, cached=cached, known=known)
             self._annotate(span, decision, degraded=False)
             return decision
 
@@ -188,12 +189,14 @@ class LLMRouter:
         history: tuple[ChatTurn, ...],
         *,
         cached: bool,
+        known: str | None = None,
     ) -> RouteDecision:
         if out is None:
             return self._escalate(
-                "invalid classifier output", 0.0, self._order_id(text, history, None), cached
-            )
-        order_id = self._order_id(text, history, out.order_id)
+                "invalid classifier output", 0.0, self._order_id(text, history, None, known),
+                cached,
+            )  # fmt: skip
+        order_id = self._order_id(text, history, out.order_id, known)
         if not self._known(out.intent):
             return self._escalate(
                 f"unknown intent {out.intent!r}", out.confidence, order_id, cached
@@ -215,11 +218,19 @@ class LLMRouter:
         )  # fmt: skip
 
     @staticmethod
-    def _order_id(text: str, history: tuple[ChatTurn, ...], llm_guess: str | None) -> str | None:
-        """Regex hit in the current message > most recent id the customer wrote earlier >
-        the LLM's guess, only if its digits appear in what the customer wrote."""
+    def _order_id(
+        text: str,
+        history: tuple[ChatTurn, ...],
+        llm_guess: str | None,
+        known: str | None = None,
+    ) -> str | None:
+        """Regex hit in the current message > the id the caller gave at intake (voice) > most
+        recent id the customer wrote earlier > the LLM's guess, only if its digits appear in
+        what the customer wrote."""
         if ids := find_order_ids(text):
             return ids[0]
+        if known:
+            return known
         user_text = [t.text for t in history if t.role == "user"]
         for turn in reversed(user_text):
             if ids := find_order_ids(turn):
@@ -229,8 +240,10 @@ class LLMRouter:
             return guess
         return None
 
-    def _degraded(self, text: str, history: tuple[ChatTurn, ...], error: str) -> RouteDecision:
-        order_id = self._order_id(text, history, None)
+    def _degraded(
+        self, text: str, history: tuple[ChatTurn, ...], error: str, known: str | None = None
+    ) -> RouteDecision:
+        order_id = self._order_id(text, history, None, known)
         intent = next(
             (i for i, rx in _RULES if i in self._registry and rx.search(text)),
             Intent.ORDER_STATUS if order_id and Intent.ORDER_STATUS in self._registry else None,

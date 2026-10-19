@@ -22,6 +22,7 @@ from opentelemetry.trace import Status, StatusCode
 
 from support_assistant.contracts import (
     BlockedMessage,
+    CallerProfile,
     ChatTurn,
     CheckedMessage,
     DraftReply,
@@ -90,7 +91,11 @@ class SupportPipeline:
         return await stats() if stats is not None else None
 
     async def handle(
-        self, session_id: str, text: str, channel: Literal["text", "voice"] = "text"
+        self,
+        session_id: str,
+        text: str,
+        channel: Literal["text", "voice"] = "text",
+        caller: CallerProfile | None = None,
     ) -> FinalReply:
         start = time.perf_counter()
         deadline = asyncio.get_running_loop().time() + self._turn_timeout_s
@@ -98,7 +103,7 @@ class SupportPipeline:
             trace_id = format(span.get_span_context().trace_id, "032x")
             span.set_attribute("app.channel", channel)
             try:
-                reply = await self._turn(span, session_id, text, channel, deadline)
+                reply = await self._turn(span, session_id, text, channel, deadline, caller)
             except Exception as exc:  # last line of defence: never raise to the caller
                 span.record_exception(exc)
                 span.set_status(Status(StatusCode.ERROR, str(exc)))
@@ -131,6 +136,7 @@ class SupportPipeline:
         text: str,
         channel: Literal["text", "voice"],
         deadline: float,
+        caller: CallerProfile | None = None,
     ) -> FinalReply:
         loop = asyncio.get_running_loop()
 
@@ -145,7 +151,9 @@ class SupportPipeline:
         except StageError as exc:  # history is context, not a requirement
             span.add_event("session.load_failed", {"error": str(exc)})
             history = ()
-        raw = RawMessage(session_id=session_id, text=text, channel=channel, history=history)
+        raw = RawMessage(
+            session_id=session_id, text=text, channel=channel, history=history, caller=caller
+        )
 
         # Fail closed: any guard error or unexpected return type stops the turn here.
         checked = await self._stage("input_guard", lambda: self.input_guard.check(raw), budget(r))
