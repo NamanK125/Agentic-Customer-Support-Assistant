@@ -4,8 +4,14 @@ Customer support assistant for **PulseNest**, a fictional brand of home health-m
 (blood pressure monitor, pulse oximeter, thermometer, smart scale, companion app). The domain,
 policies and forbidden claims are defined in [`docs/domain.md`](docs/domain.md).
 
-Status: the text side (Part A) is implemented. The voice pipeline (Part B) and the written
-answers (Part C) are not in this version yet.
+| Brief | Where |
+|---|---|
+| Part A: agentic system (router, RAG, tools, guardrails, cache) | `src/support_assistant/{harness,rag,tools,agents,guardrails}`, [design note A](docs/design_note_A.md), [guardrail trace](docs/guardrail_trace.md) |
+| Part B: voice turn-taking (barge-in, resilience, latency) | `src/support_assistant/voice/`, [design note B](docs/design_note_B.md), scenario runs in `demo/runs/` |
+| Part C: integration and ops | [docs/part_C_answers.md](docs/part_C_answers.md) |
+| Decisions log | [docs/decisions_log.md](docs/decisions_log.md) |
+| Red-team (failures we found and didn't fix) | [docs/red_team.md](docs/red_team.md) |
+| Demo walkthrough (browser console) | [docs/demo_script.md](docs/demo_script.md) |
 
 ## How a turn flows
 
@@ -32,6 +38,30 @@ RawMessage ─► InputGuardrail ─► CheckedMessage ─► Router ─► Hand
 - **Scale-out:** stateless workers; sessions, classifier cache and handoff tickets in Redis when
   `REDIS_URL` is set. See [`docs/scaling.md`](docs/scaling.md).
 
+## Voice
+
+```
+caller audio ─► Silero VAD + endpointer ─► STT (Groq Whisper → local faster-whisper int8)
+   ─► call intake (name / order id up front) ─► the same text pipeline (channel="voice")
+   ─► TTS (streaming in-house TTS → Edge TTS → canned audio) ─► caller
+```
+
+- **Barge-in, two-stage:** speech during playback ducks it (160 ms), sustained speech (560 ms)
+  cuts it and becomes the next turn; noise and "uh-huh" un-duck and playback continues.
+- **No double-handled or dropped turns:** one control loop owns all call state, every result
+  carries its turn id, stale results are dropped, and an unheard turn is merged into the next.
+- **Resilience:** per-attempt timeouts, circuit breakers and fallback chains for STT and TTS; a
+  filler ("one moment") and canned apologies so a turn never goes silent or hangs.
+- **Latency:** instrumented from the end of the caller's last voiced frame, per stage.
+- **One TTS voice** (`TTS_SPEAKER`) for every request of every call; a frequency-based sentence
+  cache serves repeated phrases with no synthesis.
+
+```bash
+uv run python scripts/run_scenario.py demo/scenarios/03_real_interruption.json   # scripted, real providers
+uv run support-voice                                                           # live, mic + speakers (headphones)
+uv run python scripts/record_clips.py                                          # record real caller clips
+```
+
 ## Setup
 
 Requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
@@ -52,7 +82,7 @@ server. Run `uv run python scripts/check_llm.py` to check what the configured en
 uv run support-assistant                      # interactive chat
 uv run support-assistant --once "Where is my order PN-10002?"
 uv run python scripts/smoke.py                # one turn per path (product, orders, returns, injection, medical)
-uv run uvicorn support_assistant.api:create_app --factory --port 8080   # POST /v1/chat
+uv run uvicorn support_assistant.api:create_app --factory --port 8000   # console at http://localhost:8000
 docker compose -f deploy/docker-compose.yml up   # 3 app replicas + nginx + Redis + Jaeger
 ```
 
@@ -64,7 +94,10 @@ uv run ruff check src tests scripts eval
 uv run lint-imports      # the CheckedMessage seal contract
 ```
 
-## Evaluation data
+## Evaluation
+
+`uv run python eval/run_text_eval.py` runs routing accuracy, guardrail recall/FPR and the
+classifier-cache hit rate against the configured LLM (`eval/results/text_eval_<date>.json`).
 
 | File | Rows | Purpose |
 |---|---|---|
@@ -80,9 +113,15 @@ bge-small vs BM25): [`eval/results/`](eval/results/). Rebuild the HF-derived set
 
 ## Documents
 
+- [`docs/demo_script.md`](docs/demo_script.md): step-by-step demo through the browser console
+  (`http://localhost:8000`): text chat, voice call, barge-in, fault drills, scripted scenarios
 - [`docs/decisions_log.md`](docs/decisions_log.md): timestamped design decisions, including
   abandoned approaches and open doubts
 - [`docs/guardrail_trace.md`](docs/guardrail_trace.md): structural no-bypass trace, guardrail vs
   tool-agent reconciliation, outage policy, known failure modes
-- [`docs/scaling.md`](docs/scaling.md): 10k concurrent sessions, adding a new agent
+- [`docs/design_note_A.md`](docs/design_note_A.md): scaling, adding a 4th agent, eval set and metrics, guardrail vs tool reconciliation
+- [`docs/design_note_B.md`](docs/design_note_B.md): end-of-utterance detection, on-device vs server VAD, streaming vs batch ASR, measured latency
+- [`docs/part_C_answers.md`](docs/part_C_answers.md): voice-to-chat state, production eval strategy, Groq degradation and failover
+- [`docs/red_team.md`](docs/red_team.md): failures found in our own system and why they're not fixed
+- [`docs/scaling.md`](docs/scaling.md): capacity math for 10k concurrent sessions
 - [`docs/domain.md`](docs/domain.md): the PulseNest domain the knowledge base and guards are built on
