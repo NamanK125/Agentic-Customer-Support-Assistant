@@ -1,0 +1,180 @@
+{"id": "route-001", "text": "help with canceling purchase PN-10893", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-002", "text": "i do not know how i can cancel purchase PN-10459", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-003", "text": "cancel purchase PN-10182", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-004", "text": "want help cancelling purchase PN-10549", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-005", "text": "I want help cancelling purchase PN-10269", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-006", "text": "I don't want purchase PN-10543", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-007", "text": "I purchased some items, I want to cancel order PN-10161", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-008", "text": "i have a problem with cancelling order PN-10855", "expected_intent": "return_refund", "source": "bitext", "source_intent": "cancel_order", "ambiguous": false}
+{"id": "route-009", "text": "I don't know how I can check the early termination fees", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-010", "text": "what are the penalties for breaking the contract?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-011", "text": "assistance to check the termination fee", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-012", "text": "what are the withdrawal charged?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-013", "text": "I do not know what to do to see the cancellation charges", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-014", "text": "can you help me seeing the withdrawal penalty?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-015", "text": "can you help me checking the termination charges?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-016", "text": "I do not know what to do to check the termination penalties", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_cancellation_fee", "ambiguous": false}
+{"id": "route-017", "text": "show me in what casescan i request my money back", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-018", "text": "I'd like to see how long refunds  take help me", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-019", "text": "need assistance to check in what cases can I ask for refunds", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-020", "text": "help me check in what cases can I request a reimbursement", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-021", "text": "help to check in what situations can I ask to be refunded", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-022", "text": "can you help me seeing in what cases can I request a refund?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-023", "text": "could I see in which cases can I request a fucking refund?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-024", "text": "what do I have to do to check your reimbursement policy?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "check_refund_policy", "ambiguous": false}
+{"id": "route-025", "text": "assistyance to file a damn claim against ur organization", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-026", "text": "acn I make a consumer reclamation against your business?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-027", "text": "help me to lodge a complaint against ur company", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-028", "text": "can i file a complaint against ur organization", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-029", "text": "I am trying to lodge a customer complaint", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-030", "text": "help filing a consumer complaint against your organization", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-031", "text": "help to make a complaint against your business", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-032", "text": "can you help me filing a claim against your organization?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-033", "text": "I need to file a customer complaint against your company", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-034", "text": "want assistance to make a claim", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-035", "text": "lodging consumer claim against your company", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-036", "text": "I want help to lodge an complaint against your company", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-037", "text": "need to file a complaint against ur company", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-038", "text": "where do I lodge a complaint against your company?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-039", "text": "I have to lodge a customer reclamation against your business", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-040", "text": "I want to file a customer reclamation, can I get some help?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-041", "text": "I do not know how I can make a reclamation", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-042", "text": "I'm extremely unhapp with ur services help to make a claim", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-043", "text": "my experience with you was awful, file a reclamation", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-044", "text": "is it possible to make a reclamation against your business?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "complaint", "ambiguous": false}
+{"id": "route-045", "text": "I want help to talk with a human agent", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-046", "text": "what do I have to do to contact someone?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-047", "text": "I need to speak to an operator", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-048", "text": "what do I have to do to chat with an agent?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-049", "text": "what do I have to do to speak to an agent?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-050", "text": "i do not know how i can talk to an operator", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-051", "text": "will you transfer to me somebody?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-052", "text": "I'm trying to talk with a person", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-053", "text": "I need help to talk to a person", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-054", "text": "can ya help me speaking to someone", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-055", "text": "i want assistance to contact somebody", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-056", "text": "assistance chatting  with a live agent", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-057", "text": "i have got to talk with an agent  could uhelp me", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-058", "text": "how do I speak to an assistant?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-059", "text": "I can't speak with a live agent", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-060", "text": "i need help to talk to someone", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-061", "text": "speak to an assistnat", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-062", "text": "speak with human agent", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-063", "text": "assistance to speak to an operator", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-064", "text": "I have to speak with somebody, can I get some help?", "expected_intent": "escalate_to_human", "source": "bitext", "source_intent": "contact_human_agent", "ambiguous": false}
+{"id": "route-065", "text": "give me information about the shippong periods", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-066", "text": "need assistance seeing when will my parcel arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-067", "text": "what is the shpiping period?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-068", "text": "I call to see when my goddamn package is going to arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-069", "text": "need help checking how long it takes for the item to arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-070", "text": "how to see how long it takes for my shipment to arrive?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-071", "text": "i want help seeing when will my itwm arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-072", "text": "I need assistance checking when my item is going to arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-073", "text": "I have got to check when will my parcel arrive, I need help", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-074", "text": "how do i see how long it takes for my delivery to arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-075", "text": "where could I see when will my purchase arrive?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-076", "text": "how can I see how soon can I expect my goddamn delivery?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-077", "text": "wanna see when my item is gonna arrive how could i do it", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-078", "text": "wanna know more about the shipping periods", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-079", "text": "where do I check how long it takes for my product to arrive?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-080", "text": "I want information about the shipping period", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-081", "text": "help me to see how soon can I expect my parcel", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-082", "text": "I want help seeing when will my purchase arrive", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-083", "text": "could I see when will my article arrive?", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-084", "text": "need help  seeing how long the shipment takes", "expected_intent": "order_status", "source": "bitext", "source_intent": "delivery_period", "ambiguous": false}
+{"id": "route-085", "text": "want help to get a reimbursement of money", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-086", "text": "I have got to demand fucking reimbursements", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-087", "text": "can you help me demand a reimbursement of money?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-088", "text": "I want assistance to ask for rebates", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-089", "text": "help me requesting a bloody compensation", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-090", "text": "want help obtaining refunds of my money", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-091", "text": "assistance to get a rebate", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-092", "text": "I need help to request reimbursements of money", "expected_intent": "return_refund", "source": "bitext", "source_intent": "get_refund", "ambiguous": false}
+{"id": "route-093", "text": "I don't know what to do to seeorder PN-10083 status", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-094", "text": "checking status of order PN-10530", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-095", "text": "I don't know how I can check the ETA of order732201349959", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-096", "text": "could I see the current status of order PN-10791?", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-097", "text": "I want to see the ETA of order PN-10688, I need help", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-098", "text": "I'd like to locate purchase PN-10526 i need assistance", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-099", "text": "track order PN-10226", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-100", "text": "help me see the ETA of the order PN-10550", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-101", "text": "I need help to track purchase PN-10955", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-102", "text": "order PN-10974 status", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-103", "text": "how to check the ETA of the order PN-10579?", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-104", "text": "I have to check the ETA of the purchase PN-10367", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-105", "text": "show me order PN-10842 status", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-106", "text": "check current status of order PN-10493", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-107", "text": "I do not know what to do to locate order PN-10147", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-108", "text": "i want help seeing theeta of purchase PN-10052", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-109", "text": "help seeing order PN-10188 status", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-110", "text": "see order PN-10179 cuurrent status", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-111", "text": "help to see the eta of purchase PN-10129", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-112", "text": "want assistance to check the ETA of purchase PN-10670", "expected_intent": "order_status", "source": "bitext", "source_intent": "track_order", "ambiguous": false}
+{"id": "route-113", "text": "can I track the reimbursement?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-114", "text": "I need help to check the current status of my refund", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-115", "text": "status of refund", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-116", "text": "help me seeing if there are any updates on my compensation", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-117", "text": "how to see the status of my restitution", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-118", "text": "I need to check my reimbursement status, will you help me?", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-119", "text": "help me to see if there is anything new on the reimbursement", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-120", "text": "I'd like to see if there is anything new on the refund", "expected_intent": "return_refund", "source": "bitext", "source_intent": "track_refund", "ambiguous": false}
+{"id": "route-121", "text": "How accurate is the BP-200 cuff's pressure reading?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-122", "text": "wat is the warrenty on the BP200", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-123", "text": "Does the Oxi O2 still give a reading with cold fingers?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-124", "text": "My Oxi O2 keeps showing poor readings, could nail polish be the cause?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-125", "text": "What does error E3 mean on the BP-200?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-126", "text": "The cuff shows E1 every time I start, what does that mean?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-127", "text": "what does E5 on the cuff mean, bluetooth wont pair", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-128", "text": "Which arm size does the BP-200 cuff fit?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-129", "text": "Will the BP-200 fit an arm that is 45 cm around?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-130", "text": "How many readings can the BP-200 store for two users?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-131", "text": "What batteries does the BP-200 take and how long do they last?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-132", "text": "Is the Oxi O2 powered by AAA batteries?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-133", "text": "Which battery does the Therm T1 need?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-134", "text": "Can the Scale S3 take someone who weighs 170 kg?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-135", "text": "What is the maximum weight the S3 scale supports?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-136", "text": "Does the Care+ app work on Android 8?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-137", "text": "Will Care+ work on an iPhone running iOS 14?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-138", "text": "How many family profiles can I add on Care+?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-139", "text": "How much does Care+ cost per month and can I cancel anytime?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-140", "text": "If I cancel Care+ in the middle of the month, do I get a pro-rated refund?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-141", "text": "How long is the warranty on the BP-200?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-142", "text": "Is the Oxi O2 covered for 2 years or only 1 year?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-143", "text": "Are the Therm T1 probe covers reusable?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-144", "text": "Do I need to buy probe covers separately for the Therm T1?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-145", "text": "How often should the BP-200 be recalibrated, and is that free?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-146", "text": "What is the shipping charge if my cart is below 999 rupees?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-147", "text": "Is shipping free on the Scale S3?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-148", "text": "How long does standard delivery take to Jaipur?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-149", "text": "Is express shipping available in Bengaluru and how much does it cost?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-150", "text": "Can I return an unopened Oxi O2 within 30 days of delivery?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-151", "text": "What is the return window for an opened BP-200?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-152", "text": "If I open the Scale S3 and don't like it, is there a restocking fee?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-153", "text": "Can I return an opened Therm T1 thermometer?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-154", "text": "Can the BP-200 take readings without the app?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-155", "text": "Does Care+ include the PDF reports I can share with my doctor?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-156", "text": "Is the Therm T1 accurate to within 0.2 degrees?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-157", "text": "Mera Oxi O2 ka reading bahut kam aa raha hai, kya karu?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-158", "text": "BP-200 ka cuff kis size ke haath pe fit hota hai?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-159", "text": "Scale S3 ki warranty kitne saal ki hai?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-160", "text": "Care+ app iPhone pe chalegi kya, iOS version kitna chahiye?", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-161", "text": "I want to speak to a real person about my BP-200 exception request.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-162", "text": "Please connect me to a human agent, the bot is not helping.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-163", "text": "This is my third Oxi O2 that arrived defective. I want a manager on this now.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-164", "text": "Can someone from PulseNest support call me? I don't want a chatbot.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-165", "text": "I'm filing a formal complaint about the Scale S3, it arrived with a cracked display.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-166", "text": "bhai kisi insaan se baat karwao, bot kuch samajh nahi raha", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-167", "text": "Mujhe support team se baat karni hai, Care+ ka bill galat laga hai.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-168", "text": "I need an exception on the restocking fee because I opened the cuff by mistake.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-169", "text": "Can a human agent tell me today whether my Therm T1 return is approved?", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-170", "text": "The app sync has failed for weeks and I've complained twice. Escalate this please.", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": false}
+{"id": "route-171", "text": "where's my order PN-10482 and can I return it if it's late?", "expected_intent": "order_status", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-172", "text": "where is my order", "expected_intent": "order_status", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-173", "text": "my BP-200 reading was 185/125 today, what should I do and can I return the cuff?", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-174", "text": "I want a refund for the Oxi O2 and also how do I pair it with the app?", "expected_intent": "return_refund", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-175", "text": "cancel my Care+ and refund last month's payment", "expected_intent": "return_refund", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-176", "text": "Is the Scale S3 safe with a pacemaker? I also want to return mine.", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-177", "text": "it's been two weeks and nobody has replied to my ticket, what now", "expected_intent": "escalate_to_human", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-178", "text": "order PN-10217 still isn't delivered and the thermometer is broken, sort it out", "expected_intent": "order_status", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-179", "text": "hi", "expected_intent": "product_question", "source": "handwritten", "source_intent": null, "ambiguous": true}
+{"id": "route-180", "text": "I want to return my cuff, it doesn't fit my arm", "expected_intent": "return_refund", "source": "handwritten", "source_intent": null, "ambiguous": true}
