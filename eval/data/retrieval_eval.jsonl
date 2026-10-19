@@ -1,0 +1,52 @@
+{"id": "q01", "query": "What is the price of the BP-200?", "relevant_doc_ids": ["bp-200-faq"]}
+{"id": "q02", "query": "which arm sizes fit the blood pressure cuff", "relevant_doc_ids": ["bp-200-faq"]}
+{"id": "q03", "query": "how many readings can the BP monitor store", "relevant_doc_ids": ["bp-200-faq"]}
+{"id": "q04", "query": "BP-200 kitne batteries leti hai", "relevant_doc_ids": ["bp-200-faq"]}
+{"id": "q05", "query": "BP machine pe E2 aa raha hai", "relevant_doc_ids": ["bp-200-troubleshooting"]}
+{"id": "q06", "query": "my blood pressure monitor shows E1, what does it mean?", "relevant_doc_ids": ["bp-200-troubleshooting"]}
+{"id": "q07", "query": "cuff overinflated error E3", "relevant_doc_ids": ["bp-200-troubleshooting"]}
+{"id": "q08", "query": "E4 on display of my bp monitor", "relevant_doc_ids": ["bp-200-troubleshooting"]}
+{"id": "q09", "query": "BP-200 E5 error not connecting to phone", "relevant_doc_ids": ["bp-200-troubleshooting", "bluetooth-pairing"]}
+{"id": "q10", "query": "bp mashine error e2 movment detected what to do", "relevant_doc_ids": ["bp-200-troubleshooting"]}
+{"id": "q11", "query": "how accurate is the fingertip oximeter", "relevant_doc_ids": ["ox-02-faq"]}
+{"id": "q12", "query": "what is the SpO2 range of OX-02", "relevant_doc_ids": ["ox-02-faq"]}
+{"id": "q13", "query": "oximeter showing unstable number, fingers are cold", "relevant_doc_ids": ["ox-02-troubleshooting"]}
+{"id": "q14", "query": "does nail polish affect my pulse oximeter reading", "relevant_doc_ids": ["ox-02-troubleshooting"]}
+{"id": "q15", "query": "oximeter pe reading nahi aa rahi, kya karu", "relevant_doc_ids": ["ox-02-troubleshooting"]}
+{"id": "q16", "query": "can I return my thermometer after opening it", "relevant_doc_ids": ["th-01-faq", "returns"]}
+{"id": "q17", "query": "do I need to buy probe covers for ear thermometer", "relevant_doc_ids": ["th-01-faq"]}
+{"id": "q18", "query": "thermometer battery type", "relevant_doc_ids": ["th-01-faq"]}
+{"id": "q19", "query": "is the scale ok for someone with a pacemaker", "relevant_doc_ids": ["scale-safety-pacemaker", "sc-03-faq"]}
+{"id": "q20", "query": "what is the max weight the smart scale supports", "relevant_doc_ids": ["sc-03-faq"]}
+{"id": "q21", "query": "body fat numbers from the scale, are they accurate?", "relevant_doc_ids": ["sc-03-faq"]}
+{"id": "q22", "query": "how much does Care+ cost per month", "relevant_doc_ids": ["care-plus"]}
+{"id": "q23", "query": "how do I cancel my subscription", "relevant_doc_ids": ["care-plus"]}
+{"id": "q24", "query": "Care+ pe kitne family profiles ban sakte hain", "relevant_doc_ids": ["care-plus"]}
+{"id": "q25", "query": "will I get a pro-rated refund if I cancel the app subscription mid month", "relevant_doc_ids": ["care-plus"]}
+{"id": "q26", "query": "is shipping free", "relevant_doc_ids": ["shipping"]}
+{"id": "q27", "query": "how much is express delivery and which cities", "relevant_doc_ids": ["shipping"]}
+{"id": "q28", "query": "delivery time in non metro towns", "relevant_doc_ids": ["shipping"]}
+{"id": "q29", "query": "order kab tak pahunchega standard shipping", "relevant_doc_ids": ["shipping"]}
+{"id": "q30", "query": "return window for an unopened item", "relevant_doc_ids": ["returns"]}
+{"id": "q31", "query": "I opened the oximeter, can I still return it? any fee?", "relevant_doc_ids": ["returns"]}
+{"id": "q32", "query": "what is the restocking fee", "relevant_doc_ids": ["returns"]}
+{"id": "q33", "query": "how long until I get my money back after returning", "relevant_doc_ids": ["refunds"]}
+{"id": "q34", "query": "refund kitne din mein aayega", "relevant_doc_ids": ["refunds"]}
+{"id": "q35", "query": "where does the refund go, can it be sent to another account", "relevant_doc_ids": ["refunds"]}
+{"id": "q36", "query": "warranty period for the BP monitor", "relevant_doc_ids": ["warranty-recalibration"]}
+{"id": "q37", "query": "how often should I recalibrate my blood pressure monitor", "relevant_doc_ids": ["warranty-recalibration"]}
+{"id": "q38", "query": "my device is defective, will you replace it", "relevant_doc_ids": ["warranty-recalibration", "returns"]}
+{"id": "q39", "query": "how do I pair the app with my device over bluetooth", "relevant_doc_ids": ["bluetooth-pairing"]}
+{"id": "q40", "query": "phone not finding my device bluetooth", "relevant_doc_ids": ["bluetooth-pairing"]}
+{"id": "q41", "query": "my oxygen is 90, what should I do", "relevant_doc_ids": ["medical-disclaimer"]}
+{"id": "q42", "query": "can you tell me if my blood pressure reading is normal", "relevant_doc_ids": ["medical-disclaimer"]}
+{"id": "q43", "query": "what are your support hours", "relevant_doc_ids": ["contact-support"]}
+{"id": "q44", "query": "I want to talk to a human agent at night", "relevant_doc_ids": ["contact-support"]}
+{"id": "oos01", "query": "what is the weather in Mumbai today", "relevant_doc_ids": []}
+{"id": "oos02", "query": "recommend a good pizza place", "relevant_doc_ids": []}
+{"id": "oos03", "query": "how does the Omron blood pressure monitor compare", "relevant_doc_ids": []}
+{"id": "oos04", "query": "write me a python script to sort a list", "relevant_doc_ids": []}
+{"id": "oos05", "query": "who won the cricket world cup", "relevant_doc_ids": []}
+{"id": "oos06", "query": "what is your CEO's salary", "relevant_doc_ids": []}
+{"id": "oos07", "query": "do you sell glucose meters", "relevant_doc_ids": []}
+{"id": "oos08", "query": "how do I lose weight fast", "relevant_doc_ids": []}
