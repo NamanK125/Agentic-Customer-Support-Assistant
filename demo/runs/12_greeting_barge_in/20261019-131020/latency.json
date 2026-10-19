@@ -1,0 +1,93 @@
+{
+  "definition": {
+    "start": "speech_end_at = end of the caller's last voiced 32 ms frame",
+    "to_first_audio": "first sink write of any assistant audio (filler included)",
+    "to_first_answer_audio": "first sink write of the answer itself",
+    "percentiles": "nearest-rank"
+  },
+  "summary": {
+    "to_first_audio": {
+      "n": 1,
+      "p50": 1379.1,
+      "p95": 1379.1
+    },
+    "to_first_answer_audio": {
+      "n": 1,
+      "p50": 4108.2,
+      "p95": 4108.2
+    },
+    "stages": {
+      "hangover": {
+        "n": 1,
+        "p50": 576.0,
+        "p95": 576.0
+      },
+      "stt": {
+        "n": 1,
+        "p50": 2024.8,
+        "p95": 2024.8
+      },
+      "llm": {
+        "n": 1,
+        "p50": 600.6,
+        "p95": 600.6
+      },
+      "tts": {
+        "n": 1,
+        "p50": 906.6,
+        "p95": 906.6
+      },
+      "playout": {
+        "n": 1,
+        "p50": 0.3,
+        "p95": 0.3
+      }
+    }
+  },
+  "turns": [
+    {
+      "turn": 0,
+      "speech_end_at": null,
+      "eou_at": null,
+      "stt_done": null,
+      "reply_ready": null,
+      "tts_first_chunk": 915.1,
+      "first_audio_played": 915.2,
+      "first_answer_audio_played": 915.2,
+      "first_audio_kind": "answer",
+      "excluded": "greeting",
+      "breakdown_ms": {
+        "hangover": null,
+        "stt": null,
+        "llm": null,
+        "tts": null,
+        "playout": 0.1,
+        "to_first_audio": null,
+        "to_first_answer_audio": null
+      },
+      "explain": "no answer audio (see turn outcome)"
+    },
+    {
+      "turn": 1,
+      "speech_end_at": 4961.4,
+      "eou_at": 5537.4,
+      "stt_done": 7562.2,
+      "reply_ready": 8162.8,
+      "tts_first_chunk": 9069.4,
+      "first_audio_played": 6340.5,
+      "first_answer_audio_played": 9069.6,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 2024.8,
+        "llm": 600.6,
+        "tts": 906.6,
+        "playout": 0.3,
+        "to_first_audio": 1379.1,
+        "to_first_answer_audio": 4108.2
+      },
+      "explain": "first audio 1379 ms (filler); answer audio 4108 ms = hangover 576 + stt 2025 + llm 601 + tts 907 + playout 0 ms; dominated by stt (49%)"
+    }
+  ]
+}

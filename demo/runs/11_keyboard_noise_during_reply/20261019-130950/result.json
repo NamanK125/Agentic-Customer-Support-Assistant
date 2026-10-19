@@ -1,0 +1,222 @@
+{
+  "scenario": "11_keyboard_noise_during_reply",
+  "description": "Adversarial (scripted): steady background hum/hiss for the whole call, plus 1.2 s of keyboard clicks 0.8 s into the answer. Neither may interrupt.",
+  "providers": "real",
+  "provider_chain": {
+    "stt": [
+      "groq-whisper",
+      "local-whisper"
+    ],
+    "tts": [
+      "inhouse",
+      "edge"
+    ],
+    "canned": {
+      "didnt_catch": "inhouse",
+      "one_moment": "inhouse",
+      "trouble": "inhouse"
+    }
+  },
+  "vad": "silero",
+  "responder": "scripted",
+  "reply_latency_ms": 600,
+  "clips": {
+    "background_noise": {
+      "path": "demo/clips/synthetic/background_noise.wav",
+      "real": false
+    },
+    "order_status_query": {
+      "path": "demo/clips/synthetic/order_status_query.wav",
+      "real": false
+    },
+    "keyboard_clicks": {
+      "path": "demo/clips/synthetic/keyboard_clicks.wav",
+      "real": false
+    }
+  },
+  "all_clips_real": false,
+  "config": {
+    "endpointer": {
+      "threshold": 0.5,
+      "neg_threshold": 0.35,
+      "min_speech_ms": 250.0,
+      "hangover_ms": 560.0,
+      "pre_roll_ms": 320.0,
+      "tail_ms": 160.0,
+      "max_utterance_ms": 15000.0
+    },
+    "barge_in": {
+      "threshold": 0.5,
+      "duck_ms": 160.0,
+      "confirm_ms": 560.0,
+      "window_ms": 1200.0,
+      "unduck_after_ms": 320.0,
+      "duck_gain": 0.3
+    },
+    "session_id": "voice-11_keyboard_noise_during_reply-6c87f0",
+    "filler_after_ms": 800.0,
+    "stt_timeout_s": 20.0,
+    "responder_timeout_s": 40.0,
+    "greeting_timeout_s": 10.0,
+    "tts_first_chunk_timeout_s": 12.0,
+    "tts_chunk_timeout_s": 10.0,
+    "sink_slack_s": 2.0,
+    "stop_timeout_s": 1.0,
+    "merge_gap_ms": 200.0,
+    "split_replies": false
+  },
+  "config_overrides": {},
+  "setup_events": [
+    {
+      "t_ms": 1101.1,
+      "kind": "provider_attempt",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "attempt": 1
+      }
+    },
+    {
+      "t_ms": 1982.7,
+      "kind": "provider_ok",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "chunks": 2,
+        "ttfc_ms": 658.9,
+        "latency_ms": 881.6
+      }
+    },
+    {
+      "t_ms": 1983.5,
+      "kind": "provider_attempt",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "attempt": 1
+      }
+    },
+    {
+      "t_ms": 2659.5,
+      "kind": "provider_ok",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "chunks": 1,
+        "ttfc_ms": 613.7,
+        "latency_ms": 675.9
+      }
+    },
+    {
+      "t_ms": 2660.2,
+      "kind": "provider_attempt",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "attempt": 1
+      }
+    },
+    {
+      "t_ms": 3599.3,
+      "kind": "provider_ok",
+      "turn": null,
+      "data": {
+        "kind": "tts",
+        "provider": "inhouse",
+        "chunks": 2,
+        "ttfc_ms": 766.5,
+        "latency_ms": 939.1
+      }
+    }
+  ],
+  "passed": true,
+  "expectations": [
+    {
+      "name": "turns",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "turns_completed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "barge_in_confirmed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "no_duplicate_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "no_dropped_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "coordinator_errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "metrics": {
+    "greeting": null,
+    "turns": 1,
+    "turns_answered": 1,
+    "turns_completed": 1,
+    "interrupted": 0,
+    "merged": 0,
+    "outcomes": [
+      "answered"
+    ],
+    "barge_in_confirmed": 0,
+    "barge_in_on_answer": 0,
+    "ducks": 0,
+    "unducks": 0,
+    "utterances_ignored": 0,
+    "vad_rejected": 0,
+    "fillers": 1,
+    "stale_dropped": 0,
+    "replies_held": 0,
+    "canned": [],
+    "stt_providers": [
+      "local-whisper"
+    ],
+    "stt_texts": [
+      "Hi, where is my order PN-10002?"
+    ],
+    "fallback_used": [
+      "local-whisper"
+    ],
+    "tts_providers_ok": [
+      "inhouse"
+    ],
+    "tts_failed": 0,
+    "stt_failed": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "dropped_turns": [],
+    "max_turn_wall_ms": 21287.6,
+    "max_time_to_resolution_ms": 3546.3,
+    "coordinator_errors": 0,
+    "invariant_violations": 0,
+    "timed_out": false,
+    "runner_error": [],
+    "call_s": 27.83,
+    "wall_s": 27.83
+  }
+}

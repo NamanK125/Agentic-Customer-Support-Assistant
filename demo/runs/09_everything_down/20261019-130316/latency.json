@@ -1,0 +1,115 @@
+{
+  "definition": {
+    "start": "speech_end_at = end of the caller's last voiced 32 ms frame",
+    "to_first_audio": "first sink write of any assistant audio (filler included)",
+    "to_first_answer_audio": "first sink write of the answer itself",
+    "percentiles": "nearest-rank"
+  },
+  "summary": {
+    "to_first_audio": {
+      "n": 1,
+      "p50": 1376.9,
+      "p95": 1376.9
+    },
+    "to_first_answer_audio": {
+      "n": 1,
+      "p50": 4238.7,
+      "p95": 4238.7
+    },
+    "stages": {
+      "hangover": {
+        "n": 1,
+        "p50": 576.0,
+        "p95": 576.0
+      },
+      "stt": {
+        "n": 1,
+        "p50": 2071.0,
+        "p95": 2071.0
+      },
+      "llm": {
+        "n": 1,
+        "p50": 600.5,
+        "p95": 600.5
+      },
+      "tts": {
+        "n": 1,
+        "p50": 991.0,
+        "p95": 991.0
+      },
+      "playout": {
+        "n": 1,
+        "p50": 0.2,
+        "p95": 0.2
+      }
+    }
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "speech_end_at": 4385.3,
+      "eou_at": 4961.3,
+      "stt_done": 7588.8,
+      "reply_ready": 8190.3,
+      "tts_first_chunk": null,
+      "first_audio_played": 5764.2,
+      "first_answer_audio_played": null,
+      "first_audio_kind": "filler",
+      "excluded": "tts_failed",
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 2627.5,
+        "llm": 601.5,
+        "tts": null,
+        "playout": null,
+        "to_first_audio": 1378.8,
+        "to_first_answer_audio": null
+      },
+      "explain": "no answer audio (see turn outcome)"
+    },
+    {
+      "turn": 2,
+      "speech_end_at": 18529.3,
+      "eou_at": 19105.3,
+      "stt_done": 33108.2,
+      "reply_ready": null,
+      "tts_first_chunk": null,
+      "first_audio_played": 19907.2,
+      "first_answer_audio_played": null,
+      "first_audio_kind": "filler",
+      "excluded": "stt_failed",
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 14002.9,
+        "llm": null,
+        "tts": null,
+        "playout": null,
+        "to_first_audio": 1377.9,
+        "to_first_answer_audio": null
+      },
+      "explain": "no answer audio (see turn outcome)"
+    },
+    {
+      "turn": 3,
+      "speech_end_at": 40737.3,
+      "eou_at": 41313.3,
+      "stt_done": 43384.3,
+      "reply_ready": 43984.8,
+      "tts_first_chunk": 44975.8,
+      "first_audio_played": 42114.2,
+      "first_answer_audio_played": 44976.1,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 2071.0,
+        "llm": 600.5,
+        "tts": 991.0,
+        "playout": 0.2,
+        "to_first_audio": 1376.9,
+        "to_first_answer_audio": 4238.7
+      },
+      "explain": "first audio 1377 ms (filler); answer audio 4239 ms = hangover 576 + stt 2071 + llm 600 + tts 991 + playout 0 ms; dominated by stt (49%)"
+    }
+  ]
+}
