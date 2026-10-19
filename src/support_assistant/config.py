@@ -47,6 +47,34 @@ class Settings(BaseSettings):
     kb_dir: str | None = None  # None = <repo>/kb
     rag_cache_dir: str | None = None  # None = <repo>/.cache/rag
 
+    # Voice: STT (Groq Whisper by default, local faster-whisper int8 as fallback)
+    stt_base_url: str = "https://api.groq.com/openai/v1"
+    stt_api_key: str = ""  # empty = reuse llm_api_key when stt_base_url is the LLM endpoint
+    stt_model: str = "whisper-large-v3-turbo"
+    stt_language: str | None = "en"  # None = auto-detect (slower, needed for Hinglish)
+    stt_timeout_s: float = 4.0  # Groq: a short clip normally transcribes in well under 1 s
+    stt_local_timeout_s: float = 10.0  # last resort, so it gets longer
+    stt_local_model: str = "small"  # faster-whisper size, run with compute_type="int8"
+    # Vocabulary prompt for Whisper: biases spelling of our ids and product names. Without it,
+    # local whisper heard "PN-10002" as "PN1002" in the first live call.
+    stt_prompt: str = (
+        "PulseNest support call. Order numbers look like PN-10002 or PN-10045. "
+        "Devices: BP-200, OX-02, TH-01, SC-03, Care+ app."
+    )
+
+    # Voice: TTS (streaming WebSocket service; Edge TTS as fallback)
+    tts_ws_url: str = "ws://localhost:8080/v1/tts/stream"
+    tts_speaker: str = "RJ_BP_SDV, moderate pitch"
+    tts_language: str = "English"
+    # Server-side text processing, both on: normalization (numbers, abbreviations, mapping
+    # rules; sent as skip_normalize_input=false) and phonemization (backend phonemizer for
+    # title-case names; sent as transliterate_capitals=true).
+    tts_normalize: bool = True
+    tts_phonemize: bool = True
+    tts_first_chunk_timeout_s: float = 2.5
+    tts_chunk_timeout_s: float = 3.0
+    tts_fallback_voice: str = "en-IN-NeerjaNeural"  # Edge TTS voice
+
     # Shared state for horizontal scale-out; None = in-process memory
     redis_url: str | None = None
     cache_ttl_s: int = 3600

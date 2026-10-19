@@ -32,3 +32,10 @@ recordings/raw/
 .DS_Store
 .idea/
 .vscode/
+
+# Voice runs: only the final run per scenario is committed (added explicitly); tuning sweeps and
+# local browser-call logs stay local
+demo/runs/_tuning/
+demo/runs/web/
+demo/runs/live/
+.cache/logs/

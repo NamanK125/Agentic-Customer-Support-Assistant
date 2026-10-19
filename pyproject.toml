@@ -19,6 +19,11 @@ dependencies = [
     "opentelemetry-instrumentation-fastapi>=0.46b0",
     "datasets>=2.20",
     "huggingface-hub>=0.23",
+    "websockets>=17.2",
+    "sounddevice>=0.5.6",
+    "silero-vad>=6.2.3",
+    "faster-whisper>=1.2.1",
+    "edge-tts>=7.3.1",
 ]
 
 [dependency-groups]
@@ -33,6 +38,7 @@ dev = [
 
 [project.scripts]
 support-assistant = "support_assistant.cli:main"
+support-voice = "support_assistant.voice.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -57,6 +63,7 @@ select = ["E", "F", "I", "B", "UP", "ASYNC"]
 [tool.ruff.lint.per-file-ignores]
 # hand-written eval utterances are kept on one line each
 "scripts/fetch_datasets.py" = ["E501"]
+"eval/run_text_eval.py" = ["E501"]
 
 # Structural guarantee: only the input guardrail may mint a CheckedMessage.
 # The seal lives in support_assistant._seal; nothing outside guardrails/contracts may import it.
@@ -75,6 +82,7 @@ source_modules = [
     "support_assistant.observability",
     "support_assistant.api",
     "support_assistant.cli",
+    "support_assistant.voice",
 ]
 forbidden_modules = ["support_assistant._seal"]
 # contracts.py imports the seal to verify it, so every package reaches it indirectly via
