@@ -269,3 +269,6 @@ Format:
   WHY: Local whisper heard "PN-10002" as "PN1002" in the first live call, which made the agent ask for the order again. With the prompt, all three test clips transcribe their ids correctly.
 
 [2026-10-19 13:30] FIX: The browser console mixed sessions: the voice panel never cleared between calls, and a late message or close event from the previous call's socket could land in, play in, or end the new call. Each call now owns its state; handlers ignore anything not from the current call; events carry the session id; both panels show their session id. Server-side isolation was verified separately (concurrent and sequential calls, two chat sessions) and was not the cause.
+
+[2026-10-19 13:40] FINDING: First full text eval (in-house Qwen3.8-27B-AWQ-INT4, 12 rows in flight): routing 80.0% (return_refund recall 47%), PulseNest guard recall 87.5% / FPR 5.6%, generic deepset guard recall 11.7% / FPR 0%, classifier cache 50.6% on a repeat pass.
+  UNSURE: Under that load 63/180 routes and most guard checks hit their LLM time budgets and ran on the deterministic fallbacks, so these numbers mostly describe the degraded path. Reported as measured, with the caveat, rather than re-run selectively; a low-concurrency or Groq re-run is the next step.

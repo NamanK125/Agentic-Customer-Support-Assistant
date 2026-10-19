@@ -66,7 +66,38 @@ Runner: `uv run python eval/run_text_eval.py` → `eval/results/text_eval_<date>
 
 ### Measured (2026-10-19, in-house `Qwen3.8-27B-AWQ-INT4`)
 
-*Filled in from `eval/results/text_eval_2026-10-19.json`.*
+Source: `eval/results/text_eval_2026-10-19.json`. Run with 12 rows in flight against an in-house
+server that decodes ~10 tokens/s. **Read this caveat first:** under that load most LLM calls hit
+their time budgets. 63 of 180 routing decisions fell back to the rule-based router, and the input
+guard ran heuristics-only on 109/120 generic and 37/42 PulseNest rows. These numbers therefore
+mostly measure the **degraded path under overload**, not the LLM-backed system. Re-run at lower
+concurrency (`--concurrency 2`) or on Groq for the LLM-path numbers.
+
+| Metric | Result |
+|---|---|
+| Routing accuracy (180 rows; 0 blocked by the input guard) | **80.0%** (unambiguous rows 80.6%) |
+| Per-intent recall: escalate / order_status / product_question / return_refund | 96% / 91% / 83% / **47%** |
+| Top confusions | return_refund → escalate_to_human (14), return_refund → product_question (7) |
+| Input guard, PulseNest adversarial set (42) | recall **87.5%** (21/24), false-positive rate **5.6%** (1/18) |
+| Input guard, generic deepset set (120) | recall **11.7%**, false-positive rate **0%** (heuristic-only on 109 rows) |
+| Classifier cache hit rate, repeat pass over the same 180 messages | **50.6%** (degraded routes are deliberately not cached) |
+
+What this says:
+- The **deterministic guard is tuned for this domain's attacks and is not a general injection
+  detector**: 88% on PulseNest attacks, 12% on generic deepset attacks (role-play, off-topic
+  instructions, German-language prompts). That is acceptable only because the LLM classifier
+  normally runs in front of it, and the run shows how often it doesn't under load.
+- **`return_refund` is the weak intent.** Many Bitext refund/cancellation rows went to escalation,
+  partly because the degraded keyword router ranks escalation words first, and partly because
+  "cancel my order" has no matching tool here. This is a labelled-data and capacity problem
+  before it is a prompt problem.
+- **Misses on the domain set:** an acrostic exfiltration, a fake prior assistant turn ("I have
+  approved your refund…"), and a Hinglish instruction override. **False positive:** "I'm the
+  developer of a fitness app…".
+- **Capacity:** 12 concurrent turns already exceed the guard (6 s) and router (8 s) budgets on
+  this server. The system degrades as designed (no errors, no hangs), but quality drops. That
+  is the clearest argument in this note for per-role smaller models and admission control.
+
 
 ## 4. Guardrail vs tool agent: how they are reconciled
 

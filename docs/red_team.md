@@ -79,6 +79,14 @@ what is still open.
     still a single point of failure for accents and noisy lines; the fallback is the agent asking
     again.
 
+## Capacity
+
+19. **At 12 concurrent turns the in-house LLM can't meet the guard and router budgets.** In the
+    text eval, 63/180 routes fell back to keyword rules and the input guard ran heuristics-only on
+    146/162 rows. Nothing failed or hung, but routing accuracy (80%) and generic injection recall
+    (12%) in that run reflect the degraded path. *Why not fixed:* it needs model capacity (smaller
+    per-role models, a faster provider) or admission control, not code.
+
 ## Process caveat
 
 18. **All voice scenario runs use synthetic caller audio** (TTS-generated speech, synthesized
