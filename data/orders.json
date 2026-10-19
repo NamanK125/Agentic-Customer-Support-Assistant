@@ -1,0 +1,95 @@
+{
+  "_comment": "Mock PulseNest orders. Dates are offsets from 'today' (the injected clock), so the data never goes stale and tests are deterministic. 'opened' is what the customer reported on a prior return request; null = unknown.",
+  "orders": [
+    {
+      "order_id": "PN-10001",
+      "customer_first_name": "Aarav",
+      "status": "processing",
+      "placed_days_ago": 1,
+      "shipping_method": "standard",
+      "items": [{"sku": "BP-200", "qty": 1, "unit_price_inr": 3499, "opened": null}]
+    },
+    {
+      "order_id": "PN-10002",
+      "customer_first_name": "Diya",
+      "status": "shipped",
+      "placed_days_ago": 3,
+      "shipping_method": "express",
+      "carrier": "BlueDart",
+      "tracking_id": "BD7781204IN",
+      "carrier_eta_days_from_now": 2,
+      "items": [{"sku": "SC-03", "qty": 1, "unit_price_inr": 2999, "opened": null}]
+    },
+    {
+      "order_id": "PN-10003",
+      "customer_first_name": "Kabir",
+      "status": "delivered",
+      "placed_days_ago": 27,
+      "shipping_method": "standard",
+      "carrier": "Delhivery",
+      "tracking_id": "DLV55012931",
+      "delivered_days_ago": 22,
+      "items": [{"sku": "SC-03", "qty": 1, "unit_price_inr": 2999, "opened": false}]
+    },
+    {
+      "order_id": "PN-10004",
+      "customer_first_name": "Meera",
+      "status": "delivered",
+      "placed_days_ago": 15,
+      "shipping_method": "standard",
+      "carrier": "Delhivery",
+      "tracking_id": "DLV55019874",
+      "delivered_days_ago": 10,
+      "items": [{"sku": "BP-200", "qty": 1, "unit_price_inr": 3499, "opened": true}]
+    },
+    {
+      "order_id": "PN-10005",
+      "customer_first_name": "Rohan",
+      "status": "delivered",
+      "placed_days_ago": 24,
+      "shipping_method": "standard",
+      "carrier": "Ecom Express",
+      "tracking_id": "EE4410098211",
+      "delivered_days_ago": 20,
+      "items": [{"sku": "OX-02", "qty": 1, "unit_price_inr": 1999, "opened": true}]
+    },
+    {
+      "order_id": "PN-10006",
+      "customer_first_name": "Ishita",
+      "status": "delivered",
+      "placed_days_ago": 8,
+      "shipping_method": "express",
+      "carrier": "BlueDart",
+      "tracking_id": "BD7781377IN",
+      "delivered_days_ago": 5,
+      "items": [{"sku": "TH-01", "qty": 1, "unit_price_inr": 1499, "opened": true}]
+    },
+    {
+      "order_id": "PN-10007",
+      "customer_first_name": "Vikram",
+      "status": "cancelled",
+      "placed_days_ago": 6,
+      "shipping_method": "standard",
+      "items": [{"sku": "BP-200", "qty": 1, "unit_price_inr": 3499, "opened": null}]
+    },
+    {
+      "order_id": "PN-10008",
+      "customer_first_name": "Ananya",
+      "status": "active",
+      "placed_days_ago": 12,
+      "shipping_method": "none",
+      "items": [{"sku": "CARE-PLUS", "qty": 1, "unit_price_inr": 199, "opened": null}]
+    },
+    {
+      "order_id": "PN-10009",
+      "customer_first_name": "Farhan",
+      "status": "delivered",
+      "placed_days_ago": 45,
+      "shipping_method": "standard",
+      "carrier": "Delhivery",
+      "tracking_id": "DLV54988120",
+      "delivered_days_ago": 40,
+      "items": [{"sku": "OX-02", "qty": 1, "unit_price_inr": 1999, "opened": false}]
+    }
+  ]
+}
