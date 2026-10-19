@@ -11,7 +11,7 @@ policies and forbidden claims are defined in [`docs/domain.md`](docs/domain.md).
 | Part C: integration and ops | [docs/part_C_answers.md](docs/part_C_answers.md) |
 | Decisions log | [docs/decisions_log.md](docs/decisions_log.md) |
 | Red-team (failures we found and didn't fix) | [docs/red_team.md](docs/red_team.md) |
-| Demo walkthrough (browser console) | [docs/demo_script.md](docs/demo_script.md) |
+| Presentation | [slides/PulseNest_Support_Assistant.pptx](slides/PulseNest_Support_Assistant.pptx) |
 
 ## How a turn flows
 
@@ -42,7 +42,7 @@ RawMessage ─► InputGuardrail ─► CheckedMessage ─► Router ─► Hand
 
 ```
 caller audio ─► Silero VAD + endpointer ─► STT (Groq Whisper → local faster-whisper int8)
-   ─► call intake (name / order id up front) ─► the same text pipeline (channel="voice")
+   ─► the same text pipeline (channel="voice")
    ─► TTS (streaming in-house TTS → Edge TTS → canned audio) ─► caller
 ```
 
@@ -53,8 +53,7 @@ caller audio ─► Silero VAD + endpointer ─► STT (Groq Whisper → local f
 - **Resilience:** per-attempt timeouts, circuit breakers and fallback chains for STT and TTS; a
   filler ("one moment") and canned apologies so a turn never goes silent or hangs.
 - **Latency:** instrumented from the end of the caller's last voiced frame, per stage.
-- **One TTS voice** (`TTS_SPEAKER`) for every request of every call; a frequency-based sentence
-  cache serves repeated phrases with no synthesis.
+- **One TTS voice** (`TTS_SPEAKER`) for every request of every call.
 
 ```bash
 uv run python scripts/run_scenario.py demo/scenarios/03_real_interruption.json   # scripted, real providers
@@ -73,8 +72,7 @@ uv run python scripts/build_index.py
 ```
 
 Any OpenAI-compatible endpoint works. `.env.example` shows the settings for a self-hosted vLLM
-server. Run `uv run python scripts/check_llm.py` to check what the configured endpoint supports
-(structured output, tool calling).
+server.
 
 ## Run
 
@@ -82,8 +80,7 @@ server. Run `uv run python scripts/check_llm.py` to check what the configured en
 uv run support-assistant                      # interactive chat
 uv run support-assistant --once "Where is my order PN-10002?"
 uv run python scripts/smoke.py                # one turn per path (product, orders, returns, injection, medical)
-uv run uvicorn support_assistant.api:create_app --factory --port 8000   # console at http://localhost:8000
-docker compose -f deploy/docker-compose.yml up   # 3 app replicas + nginx + Redis + Jaeger
+uv run uvicorn support_assistant.api:create_app --factory --port 8000   # POST /v1/chat
 ```
 
 ## Tests and checks
@@ -113,8 +110,6 @@ bge-small vs BM25): [`eval/results/`](eval/results/). Rebuild the HF-derived set
 
 ## Documents
 
-- [`docs/demo_script.md`](docs/demo_script.md): step-by-step demo through the browser console
-  (`http://localhost:8000`): text chat, voice call, barge-in, fault drills, scripted scenarios
 - [`docs/decisions_log.md`](docs/decisions_log.md): timestamped design decisions, including
   abandoned approaches and open doubts
 - [`docs/guardrail_trace.md`](docs/guardrail_trace.md): structural no-bypass trace, guardrail vs

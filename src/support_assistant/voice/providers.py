@@ -10,7 +10,6 @@ from support_assistant.voice.faults import FaultInjector, FaultySTT, FaultyTTS
 from support_assistant.voice.resilience import FallbackSTT, FallbackTTS
 from support_assistant.voice.stt import GroqWhisperSTT, LocalWhisperSTT
 from support_assistant.voice.tts import EdgeTTS, InHouseStreamTTS
-from support_assistant.voice.tts_cache import CachingTTS, TTSAudioCache
 
 
 def build_stt(
@@ -40,18 +39,9 @@ EDGE_VOICE_FOR_SPEAKER = {
 }
 
 
-def voice_key(settings: Settings) -> str:
-    """Cache identity of a rendered voice: speaker plus the server-side text processing flags, so
-    audio rendered under different settings is never reused."""
-    return (
-        f"{settings.tts_speaker}|norm={int(settings.tts_normalize)}"
-        f"|phon={int(settings.tts_phonemize)}"
-    )
-
-
 def call_settings(settings: Settings) -> Settings:
     """Settings for one call: every TTS request in the call (greeting, replies, canned phrases,
-    cached sentences) uses the one configured speaker id, `TTS_SPEAKER`; nothing per call can
+    replies) uses the one configured speaker id, `TTS_SPEAKER`; nothing per call can
     change it. Failover uses the one fallback voice matching that speaker."""
     fallback = EDGE_VOICE_FOR_SPEAKER.get(settings.tts_speaker, settings.tts_fallback_voice)
     return settings.model_copy(update={"tts_fallback_voice": fallback})
@@ -63,24 +53,16 @@ def build_tts(
     events: EventSink | None = None,
     clock: Callable[[], float] | None = None,
     *,
-    cache: TTSAudioCache | None = None,
     session_label: str | None = None,
-) -> FallbackTTS | CachingTTS:
-    """TTS chain for one call, always in the one configured voice (`TTS_SPEAKER`). With `cache`,
-    recurring sentences in that voice come from the shared frequency-based cache.
+) -> FallbackTTS:
+    """TTS chain for one call, always in the one configured voice (`TTS_SPEAKER`).
     `session_label` tags every TTS request of the call."""
     s = call_settings(settings)
     inhouse = InHouseStreamTTS(s, session_label=session_label)
-    chain = FallbackTTS(
+    return FallbackTTS(
         [FaultyTTS(inhouse, injector), FaultyTTS(EdgeTTS(s), injector)],
         first_chunk_timeout_s=s.tts_first_chunk_timeout_s,
         chunk_timeout_s=s.tts_chunk_timeout_s,
         events=events,
         clock=clock,
     )
-    if cache is None:
-        return chain
-    return CachingTTS(
-        chain, cache, speaker=voice_key(s), primary=InHouseStreamTTS.name, events=events,
-        clock=clock,
-    )  # fmt: skip

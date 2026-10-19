@@ -60,7 +60,7 @@ class CannedAudio:
         primary = (
             f"{self._s.tts_speaker}|norm={int(self._s.tts_normalize)}"
             f"|phon={int(self._s.tts_phonemize)}"
-        )  # same identity as providers.voice_key
+        )
         return [("inhouse", primary), ("edge", self._s.tts_fallback_voice)]
 
     def _path(self, text: str, voice: str) -> Path:

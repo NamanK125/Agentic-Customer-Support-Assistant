@@ -272,3 +272,6 @@ Format:
 
 [2026-10-19 13:40] FINDING: First full text eval (in-house Qwen3.8-27B-AWQ-INT4, 12 rows in flight): routing 80.0% (return_refund recall 47%), PulseNest guard recall 87.5% / FPR 5.6%, generic deepset guard recall 11.7% / FPR 0%, classifier cache 50.6% on a repeat pass.
   UNSURE: Under that load 63/180 routes and most guard checks hit their LLM time budgets and ran on the deterministic fallbacks, so these numbers mostly describe the degraded path. Reported as measured, with the caveat, rather than re-run selectively; a low-concurrency or Groq re-run is the next step.
+
+[2026-10-19 17:25] DECISION: Trimmed the submission to what the brief asks for. Removed the browser test console (and the call-intake and sentence TTS cache that only it used), the Docker/nginx deploy files and the endpoint-probe scripts. Voice is demonstrated through the scripted scenario runs in demo/runs/ and the CLI mic mode.
+  WHY: They were development conveniences, not deliverables, and each was more surface for a reviewer to read without adding evidence for any requirement.

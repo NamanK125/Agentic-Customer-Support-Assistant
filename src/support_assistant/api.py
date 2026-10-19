@@ -38,12 +38,8 @@ class ChatRequest(BaseModel):
 def create_app(
     pipeline: ChatPipeline | None = None,
     settings: Settings | None = None,
-    *,
-    voice: bool | None = None,
 ) -> FastAPI:
     s = settings or get_settings()
-    if voice is None:  # the real app gets voice; tests that inject a fake pipeline don't
-        voice = pipeline is None
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -55,12 +51,6 @@ def create_app(
             app.state.pipeline = await asyncio.to_thread(build_pipeline, s)
         else:
             app.state.pipeline = pipeline
-        if voice:
-            from support_assistant.voice.web import VoiceRuntime
-
-            # Builds the shared STT chain and loads the local whisper model once, off the loop.
-            app.state.voice = VoiceRuntime(s, app.state.pipeline)
-            await app.state.voice.warm_up()
         yield
 
     app = FastAPI(title="PulseNest support assistant", version="0.1.0", lifespan=lifespan)
@@ -84,11 +74,6 @@ def create_app(
     async def cache_stats(request: Request) -> CacheStats:
         stats = await _pipeline(request).cache_stats()
         return stats or CacheStats(backend="none", hits=0, misses=0)
-
-    if voice:
-        from support_assistant.voice.web import register_voice
-
-        register_voice(app, s)  # test console at "/", /v1/voice WebSocket, fault drills
 
     FastAPIInstrumentor.instrument_app(app, excluded_urls="healthz")
     return app

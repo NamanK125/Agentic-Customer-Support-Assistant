@@ -138,7 +138,7 @@ Why the number is what it is:
   outweighs ~250 ms.
 - **TTS first chunk ~1 s.** Sending the whole reply as one request (one TTS session keeps the voice
   continuous) costs ~350 ms more than per-sentence requests (p50 650 → 986 ms). We chose voice
-  continuity; the frequency-based sentence cache brings repeated phrases to ~0 ms.
+  continuity.
 - **The filler is why the caller hears something at 1.4 s.** We report both numbers because they
   answer different questions: "did the line acknowledge me?" (1.4 s) and "when did I get my
   answer?" (10.6 s). We don't present the first as the second.
@@ -164,8 +164,8 @@ Found in the scenario runs and tuning sweeps; full list in [`red_team.md`](red_t
    real short utterances ("PN-10005" said over the filler) in the stage sweep.
 3. **An interrupted reply stays in session history in full**, although the caller heard only part
    of it. The pipeline saves the reply before playback; fixing it needs a deferred-save API.
-4. **No echo cancellation in local mic mode.** The browser UI uses Chrome's echo cancellation;
-   the CLI mic mode needs headphones.
+4. **No echo cancellation in local mic mode.** The CLI mic mode (`support-voice`) needs
+   headphones, or the assistant's own voice is heard as a barge-in.
 5. **Fixed hangover.** Hesitant speech (reading out digits) can split into two segments. They are
    merged, so no turn is lost, but the merge costs an STT/LLM restart.
 6. **All runs use synthetic caller audio.** Thresholds must be re-checked on real recordings

@@ -7,9 +7,7 @@ import websockets
 from support_assistant.config import Settings
 from support_assistant.voice.canned import CannedAudio
 from support_assistant.voice.faults import FaultInjector
-from support_assistant.voice.intake import GREETING
 from support_assistant.voice.providers import build_tts, call_settings
-from support_assistant.voice.tts_cache import TTSAudioCache
 
 SPEAKER = "RJ_BP_SDV, moderate pitch"
 
@@ -34,11 +32,8 @@ async def test_every_tts_request_in_a_call_uses_the_same_speaker(tmp_path):
         assert settings.tts_speaker == SPEAKER
 
         cs = call_settings(settings)
-        tts = build_tts(
-            cs, FaultInjector(), cache=TTSAudioCache(disk_dir=None), session_label="call-1"
-        )
+        tts = build_tts(cs, FaultInjector(), session_label="call-1")
         await CannedAudio(cs, cache_dir=tmp_path).prepare(tts)  # canned phrases
-        await tts.prewarm([GREETING])  # greeting
         for reply in ["Order PN-10002 has shipped.", "Anything else?", "Anything else?"]:
             _ = [chunk async for chunk in tts.stream(reply)]  # replies
 

@@ -9,9 +9,9 @@ it is design only, it says so.
 through the same `SupportPipeline.handle(session_id, text, channel="voice", caller=...)` as text
 chat: same input guard, router, agents, output guard, same session store. So the conversation
 history (guarded user turns and guarded assistant replies), the classifier cache and the handoff
-tickets already live in one place (Redis when `REDIS_URL` is set). The voice side adds two things
-of its own: the `CallerProfile` collected at intake (name, order id; format-constrained) and the
-call's event log.
+tickets already live in one place (Redis when `REDIS_URL` is set). The voice side adds the call's
+event log, and the pipeline already accepts an optional `CallerProfile` (name, order id;
+format-constrained) for details a channel collects outside the conversation.
 
 **What a transfer needs**, as a design (not built):
 

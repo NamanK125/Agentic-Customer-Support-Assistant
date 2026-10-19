@@ -8,8 +8,7 @@ breaks first) and [`guardrail_trace.md`](guardrail_trace.md) (structural no-bypa
 
 - **The app tier is not the bottleneck; the LLM is.** Workers are stateless async processes.
   Sessions, the classifier cache and handoff tickets live in Redis (`REDIS_URL`), so any replica
-  serves any turn and replicas scale horizontally behind a load balancer
-  (`deploy/docker-compose.yml` runs 3 + nginx + Redis + Jaeger).
+  serves any turn and replicas scale horizontally behind a load balancer.
 - **10k concurrent sessions is not 10k concurrent LLM calls.** People think and type: at one turn
   per ~20 s per session that is ~500 turns/s, and each text turn makes 3–4 LLM calls (input guard,
   router, agent, output rubric). The capacity plan in `scaling.md` sizes the model fleet in tokens
@@ -17,8 +16,7 @@ breaks first) and [`guardrail_trace.md`](guardrail_trace.md) (structural no-bypa
 - **Spend fewer and cheaper tokens per turn:**
   - the router and guard run on a small model (`LLM_MODEL_ROUTER`, per-role models);
   - the classifier cache skips the router call for repeated messages;
-  - deterministic paths skip LLM calls entirely (escalation, intake acknowledgements, templated
-    tool answers);
+  - deterministic paths skip LLM calls entirely (escalation, templated tool answers);
   - we stopped generating unused tokens. Measured on our server, decode is ~100 ms/token, and a
     free-text router rationale was ~3 s of every turn until we removed it.
 - **Backpressure instead of collapse.** Per-role concurrency limits in the LLM client, a per-turn
