@@ -110,11 +110,11 @@ bge-small vs BM25): [`eval/results/`](eval/results/). Rebuild the HF-derived set
 
 ## Documents
 
-- [`docs/decisions_log.md`](docs/decisions_log.md): design decisions in the order they were made, including
+- [`docs/decisions_log.md`](docs/decisions_log.md): timestamped design decisions, including
   abandoned approaches and open doubts
 - [`docs/guardrail_trace.md`](docs/guardrail_trace.md): structural no-bypass trace, guardrail vs
   tool-agent reconciliation, outage policy, known failure modes
-- [`docs/design_note_A.md`](docs/design_note_A.md): scaling, adding a 4th agent, eval set and metrics, guardrail vs tool reconciliation
+- [`docs/design_note_A.md`](docs/design_note_A.md): scaling, adding a 4th agent, eval set and metrics, embedding and tool-calling choices, guardrail vs tool reconciliation
 - [`docs/design_note_B.md`](docs/design_note_B.md): end-of-utterance detection, on-device vs server VAD, streaming vs batch ASR, measured latency
 - [`docs/part_C_answers.md`](docs/part_C_answers.md): voice-to-chat state, production eval strategy, Groq degradation and failover
 - [`docs/red_team.md`](docs/red_team.md): failures found in our own system and why they're not fixed

@@ -97,7 +97,35 @@ What this says:
   is the clearest argument in this note for per-role smaller models and admission control.
 
 
-## 4. Guardrail vs tool agent: how they are reconciled
+## 4. Choices the brief asks us to justify
+
+**Embeddings: local `sentence-transformers/all-MiniLM-L6-v2`, cosine threshold 0.35.** Groq
+serves no embeddings, so retrieval runs locally on CPU (no extra provider, no per-query cost, no
+outage coupling to the LLM). We measured three options on our own 52-query set (44 answerable, 8
+out-of-scope; `eval/results/retrieval_2026-10-19.md`):
+
+| Method | recall@1 | recall@3 | MRR | p50 latency |
+|---|---|---|---|---|
+| BM25 (keyword baseline) | 0.773 | 0.886 | 0.852 | ~0 ms |
+| BAAI/bge-small-en-v1.5 | 0.818 | 0.977 | 0.896 | 10.6 ms |
+| **all-MiniLM-L6-v2** | **0.886** | **1.000** | **0.932** | 7.0 ms |
+
+MiniLM wins on accuracy, but the deciding reason was **score separation**: on bge, 62% of
+out-of-scope queries scored ≥ 0.50, so no threshold cleanly separated "answerable" from "say I
+don't know". MiniLM's scores separate at 0.35. Caveat: threshold calibrated and evaluated on the
+same 52 queries (red-team #12). With 23 chunks the index is a numpy matrix; a vector DB would be
+needed only at a much larger KB.
+
+**Tool agent: native function calling, not a ReAct text loop.** Our tools are two read-only lookups
+with typed arguments (`order_id`, `opened`). Function calling gives structured, pydantic-validated
+arguments with no free-text parsing, and one call usually settles the turn, where a ReAct loop
+spends extra LLM round-trips (we measured ~100 ms per decoded token on our server) and adds a
+parsing failure mode. Safety doesn't depend on the model's tool choice: each intent has a tool
+allowlist, the order id must come from the customer's own text, and if the model emits no tool
+call (some vLLM servers have tool calling off) a deterministic "obvious tool" call runs instead.
+ReAct would earn its cost with multi-step plans across many tools, which this domain doesn't have.
+
+## 5. Guardrail vs tool agent: how they are reconciled
 
 The tool agent can settle return eligibility in one turn; the output guard forbids promising a
 refund amount or date the system hasn't confirmed. Neither silently overrides the other:
