@@ -110,7 +110,7 @@ bge-small vs BM25): [`eval/results/`](eval/results/). Rebuild the HF-derived set
 
 ## Documents
 
-- [`docs/decisions_log.md`](docs/decisions_log.md): timestamped design decisions, including
+- [`docs/decisions_log.md`](docs/decisions_log.md): design decisions in the order they were made, including
   abandoned approaches and open doubts
 - [`docs/guardrail_trace.md`](docs/guardrail_trace.md): structural no-bypass trace, guardrail vs
   tool-agent reconciliation, outage policy, known failure modes
