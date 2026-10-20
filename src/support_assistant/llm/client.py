@@ -46,7 +46,10 @@ _CLIENT_ERRORS = (
     openai.NotFoundError,
     openai.UnprocessableEntityError,
 )
-_THINK = re.compile(r"^.*?</think>\s*", re.DOTALL)
+# Everything up to the LAST </think>: Qwen3 on Groq (thinking left on) was seen writing a draft,
+# a second </think>, then the real answer; stripping to the first one leaked the draft.
+_THINK = re.compile(r"^.*</think>\s*", re.DOTALL)
+_THINK_TAG = re.compile(r"</?think>\s*")
 
 
 class LLMError(RuntimeError):
@@ -252,7 +255,7 @@ class LLMClient:
             return ChatResult(
                 # Defensive: a thinking model whose template ignores enable_thinking still must
                 # not leak its reasoning to the customer.
-                content=_THINK.sub("", choice.content or "", count=1),
+                content=_THINK_TAG.sub("", _THINK.sub("", choice.content or "", count=1)),
                 tool_calls=tool_calls,
                 model=resp.model or model,
                 latency_ms=elapsed_ms,

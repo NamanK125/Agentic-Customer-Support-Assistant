@@ -137,3 +137,16 @@ async def test_breakers_are_per_model():
     assert c._breaker_for("throttled").is_open
     out = await c.chat([{"role": "user", "content": "x"}], role="agent")  # other model unaffected
     assert out.content == "OK"
+
+
+async def test_reasoning_with_two_think_closings_is_fully_stripped():
+    leaked = (
+        "<think>check the tool result</think> Yes, PN-10004 is eligible. </think> "
+        "Yes, PN-10004 is eligible. A 10% restocking fee applies."
+    )
+
+    async def create(**kw):
+        return _resp(leaked)
+
+    out = await _client(create).chat([{"role": "user", "content": "hi"}])
+    assert out.content == "Yes, PN-10004 is eligible. A 10% restocking fee applies."
