@@ -90,24 +90,9 @@ def guard_metrics(rows: list[dict]) -> dict:
     }  # fmt: skip
 
 
-async def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--concurrency", type=int, default=8)
-    ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--rows-per-min", type=float, default=0.0)
-    args = ap.parse_args()
-    global PACE_S
-    PACE_S = 60.0 / args.rows_per_min if args.rows_per_min else 0.0
-    s = get_settings()
-    p = await asyncio.to_thread(build_pipeline)
-    lim = (lambda xs: xs[: args.limit]) if args.limit else (lambda xs: xs)
-
-    t0 = time.perf_counter()
-    routing = lim(load("routing_eval.jsonl"))
-    first = await bounded(args.concurrency, [route_row(p, r, f"r{i}") for i, r in enumerate(routing)])
-    second = await bounded(args.concurrency, [route_row(p, r, f"r2{i}") for i, r in enumerate(routing)])
-    t_route = time.perf_counter() - t0
-
+async def run_routing(p, rows: list[dict], concurrency: int) -> dict:
+    first = await bounded(concurrency, [route_row(p, r, f"r{i}") for i, r in enumerate(rows)])
+    second = await bounded(concurrency, [route_row(p, r, f"r2{i}") for i, r in enumerate(rows)])
     judged = [r for r in first if not r["blocked"]]
     correct = sum(r["predicted"] == r["expected_intent"] for r in judged)
     per = defaultdict(lambda: {"tp": 0, "fp": 0, "fn": 0})
@@ -124,7 +109,8 @@ async def main() -> None:
     }  # fmt: skip
     confusions = Counter((r["expected_intent"], r["predicted"]) for r in judged
                          if r["predicted"] != r["expected_intent"])  # fmt: skip
-    routing_res = {
+    stats = await p.cache_stats()
+    return {
         "n": len(first), "blocked_by_input_guard": len(first) - len(judged),
         "accuracy": round(correct / max(len(judged), 1), 3),
         "accuracy_unambiguous": round(
@@ -135,29 +121,53 @@ async def main() -> None:
         "top_confusions": [f"{a} -> {b}: {n}" for (a, b), n in confusions.most_common(6)],
         "cache_hit_rate_first_pass": round(sum(r["cached"] for r in first) / max(len(first), 1), 3),
         "cache_hit_rate_second_pass": round(sum(r["cached"] for r in second) / max(len(second), 1), 3),
-        "cache_stats": (await p.cache_stats()).model_dump() if await p.cache_stats() else None,
+        "cache_stats": stats.model_dump() if stats else None,
     }  # fmt: skip
 
-    t1 = time.perf_counter()
-    inj = lim(load("injection_eval.jsonl"))
-    dom = [r for r in lim(load("adversarial_domain.jsonl")) if "expected" in r]
-    inj_rows = await bounded(args.concurrency, [guard_row(p, r, i) for i, r in enumerate(inj)])
-    dom_rows = await bounded(args.concurrency, [guard_row(p, r, 1000 + i) for i, r in enumerate(dom)])
-    t_guard = time.perf_counter() - t1
 
-    result = {
-        "date": str(date.today()),
-        "model": {r: s.model_for(r) for r in ("router", "guard", "agent")},
-        "llm_base_url": s.llm_base_url,
-        "settings": {"concurrency": args.concurrency, "rows_per_min": args.rows_per_min},
-        "routing": routing_res,
-        "guard_generic_deepset": guard_metrics(inj_rows),
-        "guard_pulsenest_adversarial": guard_metrics(dom_rows),
-        "wall_s": {"routing_two_passes": round(t_route, 1), "guards": round(t_guard, 1)},
-    }
+async def main() -> None:
+    global PACE_S
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--concurrency", type=int, default=8)
+    ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--rows-per-min", type=float, default=0.0)
+    ap.add_argument(
+        "--only", choices=["routing", "guards"], default=None,
+        help="run one part and keep the other from today's results file",
+    )  # fmt: skip
+    args = ap.parse_args()
+    PACE_S = 60.0 / args.rows_per_min if args.rows_per_min else 0.0
+    s = get_settings()
+    p = await asyncio.to_thread(build_pipeline)
+    lim = (lambda xs: xs[: args.limit]) if args.limit else (lambda xs: xs)
+    out_file = OUT / f"text_eval_{date.today()}.json"
+    result = json.loads(out_file.read_text()) if args.only and out_file.exists() else {}
+    run = {"concurrency": args.concurrency, "rows_per_min": args.rows_per_min,
+           "models": {r: s.model_for(r) for r in ("router", "guard", "agent")},
+           "llm_base_url": s.llm_base_url}  # fmt: skip
+    result["date"] = str(date.today())
+
+    if args.only != "guards":
+        t0 = time.perf_counter()
+        result["routing"] = await run_routing(p, lim(load("routing_eval.jsonl")), args.concurrency)
+        result["routing"]["run"] = {**run, "wall_s": round(time.perf_counter() - t0, 1)}
+
+    if args.only != "routing":
+        t1 = time.perf_counter()
+        inj = lim(load("injection_eval.jsonl"))
+        dom = [r for r in lim(load("adversarial_domain.jsonl")) if "expected" in r]
+        inj_rows = await bounded(args.concurrency, [guard_row(p, r, i) for i, r in enumerate(inj)])
+        dom_rows = await bounded(
+            args.concurrency, [guard_row(p, r, 1000 + i) for i, r in enumerate(dom)]
+        )
+        run_g = {**run, "wall_s": round(time.perf_counter() - t1, 1)}
+        result["guard_generic_deepset"] = {**guard_metrics(inj_rows), "run": run_g}
+        result["guard_pulsenest_adversarial"] = {**guard_metrics(dom_rows), "run": run_g}
+
+    for stale in ("model", "llm_base_url", "settings", "wall_s"):  # pre-split layout
+        result.pop(stale, None)
     OUT.mkdir(exist_ok=True)
-    stem = OUT / f"text_eval_{date.today()}"
-    stem.with_suffix(".json").write_text(json.dumps(result, indent=2))
+    out_file.write_text(json.dumps(result, indent=2))
     print(json.dumps(result, indent=2))
 
 
