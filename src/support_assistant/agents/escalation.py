@@ -36,31 +36,52 @@ class HandoffTicket(BaseModel):
 class HandoffStore(Protocol):
     async def create(self, ticket: HandoffTicket) -> None: ...
     async def get(self, ticket_id: str) -> HandoffTicket | None: ...
+    async def for_session(self, session_id: str) -> HandoffTicket | None: ...
 
 
 class InMemoryHandoffStore:
     def __init__(self) -> None:
         self._tickets: dict[str, HandoffTicket] = {}
+        self._by_session: dict[str, str] = {}
 
     async def create(self, ticket: HandoffTicket) -> None:
         self._tickets[ticket.ticket_id] = ticket
+        self._by_session[ticket.session_id] = ticket.ticket_id
 
     async def get(self, ticket_id: str) -> HandoffTicket | None:
         return self._tickets.get(ticket_id)
+
+    async def for_session(self, session_id: str) -> HandoffTicket | None:
+        tid = self._by_session.get(session_id)
+        return self._tickets.get(tid) if tid else None
 
 
 class RedisHandoffStore:
     """Tickets as JSON strings plus a FIFO queue list the human-agent console consumes."""
 
-    def __init__(self, redis: Redis, *, prefix: str = "sa:handoff:") -> None:
+    def __init__(
+        self, redis: Redis, *, prefix: str = "sa:handoff:", session_ttl_s: int = 24 * 3600
+    ) -> None:
         self._r = redis
         self._prefix = prefix
+        self._session_ttl_s = session_ttl_s
 
     async def create(self, ticket: HandoffTicket) -> None:
         async with self._r.pipeline(transaction=True) as pipe:
             pipe.set(self._prefix + ticket.ticket_id, ticket.model_dump_json())
             pipe.rpush(self._prefix + "queue", ticket.ticket_id)
+            pipe.set(
+                self._prefix + "session:" + ticket.session_id,
+                ticket.ticket_id,
+                ex=self._session_ttl_s,
+            )
             await pipe.execute()
+
+    async def for_session(self, session_id: str) -> HandoffTicket | None:
+        tid = await self._r.get(self._prefix + "session:" + session_id)
+        if not tid:
+            return None
+        return await self.get(tid.decode() if isinstance(tid, bytes) else tid)
 
     async def get(self, ticket_id: str) -> HandoffTicket | None:
         raw = await self._r.get(self._prefix + ticket_id)
@@ -81,6 +102,22 @@ class EscalationHandler(Handler):
 
     async def handle(self, msg: CheckedMessage, route: RouteDecision) -> DraftReply:
         now = self._clock()
+        try:
+            existing = await self._store.for_session(msg.session_id)
+        except Exception:
+            existing = None  # can't check: filing a second ticket beats filing none
+        if existing is not None:
+            # One open ticket per conversation: a "stop", a follow-up or a misheard fragment
+            # that falls back to escalation must not file (and read out) another ticket.
+            return DraftReply(
+                text=(
+                    f"Your request is already with our support team, ticket {existing.ticket_id}. "
+                    "Is there anything else I can help you with meanwhile?"
+                ),
+                intent=route.intent,
+                handler=self.name,
+                needs_human=True,
+            )
         ticket = HandoffTicket(
             ticket_id=f"HT-{uuid.uuid4().hex[:8].upper()}",
             session_id=msg.session_id,

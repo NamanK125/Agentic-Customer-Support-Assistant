@@ -294,3 +294,9 @@ Format:
   WHY: A ticket per "hello" wastes human time and the agent's credibility, and costs an LLM call for nothing.
   ALTERNATIVES CONSIDERED: A fifth "small_talk" intent in the router (one more LLM decision for a case a regex settles exactly; the routing eval would need new rows).
   UNSURE: The word list is English plus "namaste"; other-language greetings still escalate.
+
+[2026-10-20 11:45] DECISION: Live-call fixes from a manual browser call (12 turns).
+  - "Okay, stop." was routed as a request and fell back to escalation; four tickets were filed in one call (a real request, "Okay, stop.", and a misheard fragment "And normally anyway."). Now: a bare stop/wait gets "Alright. Is there anything else I can help you with?", and escalation files one ticket per session; later escalations point to the open ticket. Bare "ok", "yes", "no" still route, since they usually answer the assistant's question.
+  - Filler delay 0.8 s -> 3 s, at the caller's request: at 0.8 s "one moment" played on nearly every turn, including after "hello". The measured first-audio figure (1.4 s) is from the 0.8 s configuration.
+  - The filler is also skipped for small talk.
+  UNSURE: A short "stop" (~300-400 ms) during a reply still can't interrupt: barge-in needs 560 ms of speech, which is what keeps "uh-huh" from cutting the assistant off. Fixing it needs the words, i.e. streaming ASR (design note B §3). Voice replies are also too long (25-30 s for a return answer); not yet fixed.

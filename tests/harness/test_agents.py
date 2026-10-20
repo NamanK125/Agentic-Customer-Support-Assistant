@@ -181,3 +181,16 @@ async def test_escalation_outside_hours_says_queued():
         checked("help"), RouteDecision(intent=Intent.ESCALATE_TO_HUMAN, confidence=0.0)
     )
     assert "queued" in draft.text
+
+
+async def test_escalation_files_one_ticket_per_session():
+    store = InMemoryHandoffStore()
+    handler = EscalationHandler(store, clock=fixed_clock)
+    esc = RouteDecision(intent=Intent.ESCALATE_TO_HUMAN, confidence=0.9, rationale="asked")
+    first = await handler(checked("I want a real person"), esc)
+    ticket_id = first.text.split("ticket ")[1].split(".")[0]
+    # "Okay, stop." / a misheard fragment falling back to escalation in the same call
+    again = await handler(checked("and normally anyway"), esc)
+    assert f"already with our support team, ticket {ticket_id}" in again.text
+    assert again.needs_human
+    assert len(store._tickets) == 1  # noqa: SLF001

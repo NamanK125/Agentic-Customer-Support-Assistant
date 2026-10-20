@@ -277,7 +277,10 @@ async def test_full_outage_end_to_end_with_real_harness_components(order_tools):
     assert human.handler == "escalation" and "HT-" in human.text
 
 
-@pytest.mark.parametrize("text", ["Hello.", "hi there", "Hey!", "Good morning", "thanks", "ok bye"])
+@pytest.mark.parametrize(
+    "text",
+    ["Hello.", "hi there", "Hey!", "Good morning", "thanks", "ok bye", "Okay, stop.", "wait"],
+)
 async def test_bare_small_talk_gets_a_reply_not_a_ticket(text):
     p, parts = build()
     reply = await p.handle("s1", text)
@@ -297,3 +300,17 @@ async def test_small_talk_still_goes_through_the_input_guard():
     p, parts = build(inp=FakeInputGuard(block=True))
     reply = await p.handle("s1", "hello")
     assert reply.blocked and parts["router"].calls == 0
+
+
+async def test_ok_stop_ends_with_an_offer_to_help():
+    p, parts = build()
+    reply = await p.handle("s1", "Okay, okay, stop.")
+    assert reply.text == "Alright. Is there anything else I can help you with?"
+    assert parts["human"].seen == []
+
+
+@pytest.mark.parametrize("text", ["ok", "yes", "no", "alright"])
+async def test_bare_yes_no_ok_are_routed_as_answers(text):
+    p, parts = build()
+    await p.handle("s1", text)
+    assert parts["router"].calls == 1

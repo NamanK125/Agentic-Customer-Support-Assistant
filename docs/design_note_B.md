@@ -141,9 +141,14 @@ Why the number is what it is:
   outweighs ~250 ms.
 - **TTS first chunk ~1.3 s.** Sending the whole reply as one request (one TTS session keeps the
   voice continuous) costs ~350 ms more than per-sentence requests. We chose voice continuity.
-- **The filler is why the caller hears something at 1.4 s.** We report both numbers because they
-  answer different questions: "did the line acknowledge me?" (1.4 s) and "when did I get my
-  answer?" (5.3 s). We don't present the first as the second.
+- **The filler is why the caller heard something at 1.4 s** in this run, where it fired 0.8 s
+  after end of utterance. We report both numbers because they answer different questions: "did
+  the line acknowledge me?" (1.4 s) and "when did I get my answer?" (5.3 s). We don't present
+  the first as the second.
+- **The filler now waits 3 s** (changed after this run). In live calls at 0.8 s it played on
+  almost every turn, including a bare "hello", and sounded robotic. At 3 s it plays only when
+  the caller has actually been waiting; first audio becomes ~3.6 s on slow turns and the answer
+  itself on fast ones. The 1.4 s figure above is therefore the 0.8 s configuration.
 - **Rate limits are part of latency on the free tier.** Groq caps each model at 8k tokens/min and
   a turn is ~3k tokens, which is why roles are spread across three models. Past that budget,
   calls fail fast into the deterministic fallbacks rather than wait.

@@ -69,7 +69,8 @@ sessions) are added to the domain adversarial set before any fix, so the fix is 
 **3. Latency SLOs from the instrumentation we already emit.** Per-stage OTel histograms
 (`llm.request.duration` per role, the pipeline's per-stage latency, voice `turn_end` events with a
 stage breakdown). SLOs, per channel:
-- voice: end-of-speech to first audio p95 < 1.5 s (filler counts; it is the "I heard you" signal),
+- voice: end-of-speech to first audio p95 < 3.5 s (filler counts; it is the "I heard you" signal,
+  and fires at 3 s),
   end-of-speech to first *answer* audio p95 < 4 s on a production-grade LLM;
 - text: turn p95 < 3 s;
 - STT/TTS: provider fallback rate < 1% of turns; zero turns over the hang budget.
@@ -106,7 +107,7 @@ Alert on burn rate (fast burn: 2% of the monthly error budget in 1 h), not on si
   strict mode, escalation for anything else. The circuit breaker makes this fail fast instead of
   spending seconds on retries per call.
 - In voice, the filler and canned phrases keep the line alive; the caller hears "one moment"
-  within ~1.4 s regardless of the LLM.
+  within ~3.5 s regardless of the LLM (the filler fires 3 s after they stop speaking).
 
 **Would we fail over to another LLM provider? Yes, but per role and only to a pre-qualified model.**
 The client is provider-agnostic (`LLM_BASE_URL` / `LLM_MODEL`, per-role overrides), so a second

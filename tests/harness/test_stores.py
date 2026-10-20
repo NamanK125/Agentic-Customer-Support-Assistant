@@ -102,5 +102,7 @@ async def test_handoff_store(kind, redis):
     await store.create(t)
     assert await store.get("HT-1") == t
     assert await store.get("HT-2") is None
+    assert await store.for_session("s") == t
+    assert await store.for_session("other") is None
     if kind == "redis":
         assert await redis.lrange("sa:handoff:queue", 0, -1) == [b"HT-1"]

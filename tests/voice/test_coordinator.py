@@ -82,7 +82,9 @@ class Call:
         self.tts = tts or FakeTTS()
         self.responder = responder or ScriptedResponder([LONG_REPLY], latency_ms=500)
         self._canned = canned
-        self.config = config or CoordinatorConfig()
+        # Timing tests were built around a short filler so every stage (incl. "caller talks over
+        # the filler") is reachable inside a few seconds; the product default is 3 s.
+        self.config = config or CoordinatorConfig(filler_after_ms=800.0)
         self.events: list[CallEvent] = []
 
     async def __aenter__(self) -> Call:

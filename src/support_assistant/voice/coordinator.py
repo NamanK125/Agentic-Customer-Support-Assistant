@@ -86,7 +86,10 @@ class CoordinatorConfig:
     endpointer: EndpointerConfig = field(default_factory=EndpointerConfig)
     barge_in: BargeInConfig = field(default_factory=BargeInConfig)
     session_id: str = "voice-call"
-    filler_after_ms: float = 800.0  # EOU -> "one moment" if no reply yet
+    # EOU -> "one moment" if no reply has started yet. 3 s rather than 0.8 s: at 0.8 s it played on
+    # every turn, even a fast "hello". On Groq, answer audio starts ~5.3 s after speech (p50), so it
+    # still plays on most turns, but only once the caller has actually been waiting.
+    filler_after_ms: float = 3000.0
     stt_timeout_s: float = 20.0  # outer bound; the chain has per-provider timeouts inside
     responder_timeout_s: float = 40.0  # pipeline's own turn budget is 30 s
     greeting_timeout_s: float = 10.0  # responder.greeting(); no greeting if it takes longer
