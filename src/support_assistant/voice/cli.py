@@ -67,11 +67,11 @@ class _Recorder:
 
     def __init__(self, inner: MicSource) -> None:
         self.inner = inner
-        self.frames: list[bytes] = []
+        self.recorded: list[bytes] = []  # not `frames`: that name is the AudioSource method
 
     async def frames_iter(self):  # noqa: ANN201
         async for f in self.inner.frames():
-            self.frames.append(f)
+            self.recorded.append(f)
             yield f
 
     def frames(self):  # noqa: ANN201 - AudioSource protocol
@@ -183,7 +183,7 @@ async def _live(args: argparse.Namespace) -> int:
         metrics = compute_metrics(events, coord)
         latency = coord.latency.report(epoch)
         (run_dir / "latency.json").write_text(json.dumps(latency, indent=2, default=str))
-        write_wav(run_dir / "caller.wav", b"".join(source.frames))
+        write_wav(run_dir / "caller.wav", b"".join(source.recorded))
         meta = {
             "clips": {},
             "providers": "real",
