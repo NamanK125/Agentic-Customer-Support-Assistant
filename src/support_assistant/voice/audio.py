@@ -19,6 +19,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import logging
+import sys
 import threading
 import wave
 from collections.abc import AsyncIterator, Callable
@@ -260,6 +261,16 @@ def stereo_call(caller: bytes, assistant: bytes) -> bytes:
 
 # ---- Live mode (sounddevice) ----------------------------------------------------------------
 
+# A real microphone is never digitally silent: even a quiet room gives a few LSBs of noise. A run
+# of exact zeros means the OS is feeding silence, which on macOS is a denied mic permission.
+MIC_SILENT_FRAMES = 47  # ~1.5 s of 32 ms frames
+MIC_DENIED_HINT = (
+    "The microphone is delivering pure digital silence (every sample is 0). On macOS this means "
+    "the app running this terminal has no microphone permission. Open System Settings > Privacy "
+    "& Security > Microphone, turn on your terminal app (Terminal, iTerm, or Visual Studio Code / "
+    "Cursor if you run it in the editor's terminal), then quit and reopen that app."
+)
+
 
 class MicSource:
     """Microphone frames at 16 kHz mono via a sounddevice InputStream. The PortAudio callback runs
@@ -298,9 +309,15 @@ class MicSource:
             callback=callback,
         )
         stream.start()
+        zero_run = 0
         try:
             while True:
                 frame = await q.get()
+                if zero_run >= 0:  # stop checking after the first real sound
+                    zero_run = zero_run + 1 if not any(frame) else -1
+                    if zero_run == MIC_SILENT_FRAMES:
+                        log.warning(MIC_DENIED_HINT)
+                        print(f"\n!! {MIC_DENIED_HINT}\n", file=sys.stderr, flush=True)
                 if len(frame) == FRAME_BYTES:
                     yield frame
         finally:

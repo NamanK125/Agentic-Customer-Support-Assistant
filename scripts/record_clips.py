@@ -25,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 
-from support_assistant.voice.audio import read_wav, write_wav
+from support_assistant.voice.audio import MIC_DENIED_HINT, MIC_SILENT_FRAMES, read_wav, write_wav
 from support_assistant.voice.contracts import FRAME_BYTES, FRAME_MS, FRAME_SAMPLES, SAMPLE_RATE
 from support_assistant.voice.scenario import CLIPS, CLIPS_REAL, CLIPS_SYNTHETIC
 from support_assistant.voice.vad import Endpointer, EndpointerConfig, EnergyVAD
@@ -50,10 +50,15 @@ def record_speech(device: int | None, max_s: float, silence_ms: float) -> bytes:
         samplerate=SAMPLE_RATE, blocksize=FRAME_SAMPLES, channels=1, dtype="int16", device=device
     ) as stream:
         n_max = int(max_s * 1000 / FRAME_MS)
+        zero_run = 0
         for i in range(n_max):
             data, _ = stream.read(FRAME_SAMPLES)
             frame = bytes(data)
             frames.append(frame)
+            if zero_run >= 0:
+                zero_run = zero_run + 1 if not any(frame) else -1
+                if zero_run == MIC_SILENT_FRAMES:
+                    raise SystemExit(f"\n{MIC_DENIED_HINT}")
             for ev in ep.push(frame, vad.speech_prob(frame), i * FRAME_MS / 1000):
                 if ev.kind == "speech_start":
                     print("  ...hearing you", flush=True)
@@ -72,6 +77,8 @@ def record_fixed(device: int | None, seconds: float) -> bytes:
         int(seconds * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype="int16", device=device
     )
     sd.wait()
+    if not audio.any():
+        raise SystemExit(f"\n{MIC_DENIED_HINT}")
     return audio.tobytes()
 
 
