@@ -1,0 +1,274 @@
+{"t_ms": 0.0, "kind": "scenario_start", "turn": null, "data": {"name": "10_latency_run", "description": "Latency (pipeline, end to end): 10 ordinary turns, no interruptions, for p50/p95 of end-of-speech -> first audio (filler included) and -> first answer audio. (`replies` are used only when run with --responder scripted.)", "providers": "real", "vad": "silero", "stt": ["groq-whisper", "local-whisper"], "tts": ["inhouse", "edge"], "canned": {"didnt_catch": "cache:inhouse", "one_moment": "cache:inhouse", "trouble": "cache:inhouse"}, "responder": "pipeline (build_pipeline, voice)", "config": {}}}
+{"t_ms": 0.1, "kind": "call_start", "turn": null, "data": {"config": {"endpointer": {"threshold": 0.5, "neg_threshold": 0.35, "min_speech_ms": 250.0, "hangover_ms": 560.0, "pre_roll_ms": 320.0, "tail_ms": 160.0, "max_utterance_ms": 15000.0}, "barge_in": {"threshold": 0.5, "duck_ms": 160.0, "confirm_ms": 560.0, "window_ms": 1200.0, "unduck_after_ms": 320.0, "duck_gain": 0.3}, "session_id": "voice-10_latency_run-b6d46a", "filler_after_ms": 800.0, "stt_timeout_s": 20.0, "responder_timeout_s": 40.0, "greeting_timeout_s": 10.0, "tts_first_chunk_timeout_s": 12.0, "tts_chunk_timeout_s": 10.0, "sink_slack_s": 2.0, "stop_timeout_s": 1.0, "merge_gap_ms": 200.0, "split_replies": false}}}
+{"t_ms": 703.5, "kind": "inject", "turn": null, "data": {"step": 0, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 1122.6, "kind": "speech_start", "turn": null, "data": {"segment": 1, "onset_ms": 897.4, "during_answer": false}}
+{"t_ms": 1122.7, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 5409.5, "kind": "speech_end", "turn": null, "data": {"segment": 1, "speech_end_at_ms": 4833.4, "voiced_ms": 3872.0, "utterance_ms": 4448, "forced": false}}
+{"t_ms": 5409.5, "kind": "eou", "turn": 1, "data": {"speech_end_at_ms": 4833.4, "hangover_ms": 576, "audio_ms": 4448, "barge_in": false, "merged_from": []}}
+{"t_ms": 5409.5, "kind": "turn_start", "turn": 1, "data": {}}
+{"t_ms": 5409.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 5409.8, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 6056.6, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 646.8}}
+{"t_ms": 6056.7, "kind": "stt_done", "turn": 1, "data": {"text": "Hi, where is my order PN-10002?", "merged_text": "Hi, where is my order PN-10002?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 647}}
+{"t_ms": 6214.1, "kind": "filler", "turn": 1, "data": {"after_ms": 800.0}}
+{"t_ms": 6214.3, "kind": "playback_start", "turn": 1, "data": {"kind": "filler", "play_id": 1, "name": null, "at_ms": 6214.2}}
+{"t_ms": 6214.4, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 8636.8, "kind": "playback_item_done", "turn": 1, "data": {"kind": "filler"}}
+{"t_ms": 8636.9, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 8811.4, "kind": "reply_ready", "turn": 1, "data": {"text": "Your order PN-10002 has been shipped via BlueDart express. The tracking ID is BD7781204IN, and the carrier's estimated delivery date is 2026-10-22. It was placed on 2026-10-17 and includes 1 unit of SKU SC-03.", "intent": "order_status", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 8811.5, "kind": "answer_queued", "turn": 1, "data": {"sentences": ["Your order PN-10002 has been shipped via BlueDart express. The tracking ID is BD7781204IN, and the carrier's estimated delivery date is 2026-10-22. It was placed on 2026-10-17 and includes 1 unit of SKU SC-03."], "behind_filler": false}}
+{"t_ms": 8811.6, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 9904.0, "kind": "tts_first_chunk", "turn": 1, "data": {"at_ms": 9903.7}}
+{"t_ms": 9904.2, "kind": "playback_start", "turn": 1, "data": {"kind": "answer", "play_id": 1, "name": null, "at_ms": 9904.1}}
+{"t_ms": 9904.2, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 10259.0, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 4, "ttfc_ms": 1092.1, "latency_ms": 1447.4}}
+{"t_ms": 33942.9, "kind": "playback_item_done", "turn": 1, "data": {"kind": "answer"}}
+{"t_ms": 33943.0, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 33943.0, "kind": "playback_done", "turn": 1, "data": {"play_id": 1}}
+{"t_ms": 33943.0, "kind": "turn_end", "turn": 1, "data": {"outcome": "answered", "wall_ms": 28534, "answer_played_ms": 24036}}
+{"t_ms": 33943.1, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 34378.4, "kind": "inject", "turn": null, "data": {"step": 1, "clip": "return_query", "kind": "say", "real": true, "path": "demo/clips/real/return_query.wav", "duration_ms": 5664, "text": "Can I return order PN-10004? I opened the box."}}
+{"t_ms": 34849.9, "kind": "speech_start", "turn": null, "data": {"segment": 2, "onset_ms": 34625.4, "during_answer": false}}
+{"t_ms": 34849.9, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 40514.2, "kind": "speech_end", "turn": null, "data": {"segment": 2, "speech_end_at_ms": 39937.4, "voiced_ms": 5088.0, "utterance_ms": 5824, "forced": false}}
+{"t_ms": 40514.3, "kind": "eou", "turn": 2, "data": {"speech_end_at_ms": 39937.4, "hangover_ms": 576, "audio_ms": 5824, "barge_in": false, "merged_from": []}}
+{"t_ms": 40514.3, "kind": "turn_start", "turn": 2, "data": {}}
+{"t_ms": 40514.3, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 40514.5, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 41202.1, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 687.6}}
+{"t_ms": 41202.3, "kind": "stt_done", "turn": 2, "data": {"text": "Can I return order PN-10004? I have opened the box.", "merged_text": "Can I return order PN-10004? I have opened the box.", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 688}}
+{"t_ms": 41317.8, "kind": "filler", "turn": 2, "data": {"after_ms": 800.0}}
+{"t_ms": 41317.9, "kind": "playback_start", "turn": 2, "data": {"kind": "filler", "play_id": 2, "name": null, "at_ms": 41317.8}}
+{"t_ms": 41317.9, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 43740.2, "kind": "playback_item_done", "turn": 2, "data": {"kind": "filler"}}
+{"t_ms": 43740.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 45268.4, "kind": "reply_ready", "turn": 2, "data": {"text": "Yes, order PN-10004 (SKU BP-200) is eligible for return since it was delivered on 2026-10-10 and is within the 15-day window, which ends on 2026-10-25. A 10% restocking fee applies because the item was opened. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days.", "intent": "return_refund", "blocked": false, "rewritten": true, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 45268.5, "kind": "answer_queued", "turn": 2, "data": {"sentences": ["Yes, order PN-10004 (SKU BP-200) is eligible for return since it was delivered on 2026-10-10 and is within the 15-day window, which ends on 2026-10-25. A 10% restocking fee applies because the item was opened. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days."], "behind_filler": false}}
+{"t_ms": 45268.5, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 46483.4, "kind": "tts_first_chunk", "turn": 2, "data": {"at_ms": 46483.2}}
+{"t_ms": 46483.6, "kind": "playback_start", "turn": 2, "data": {"kind": "answer", "play_id": 2, "name": null, "at_ms": 46483.5}}
+{"t_ms": 46483.6, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 47825.0, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 8, "ttfc_ms": 1214.6, "latency_ms": 2556.5}}
+{"t_ms": 81531.5, "kind": "playback_item_done", "turn": 2, "data": {"kind": "answer"}}
+{"t_ms": 81531.5, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 81531.5, "kind": "playback_done", "turn": 2, "data": {"play_id": 2}}
+{"t_ms": 81531.6, "kind": "turn_end", "turn": 2, "data": {"outcome": "answered", "wall_ms": 41018, "answer_played_ms": 35042}}
+{"t_ms": 81531.6, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 81956.4, "kind": "inject", "turn": null, "data": {"step": 2, "clip": "product_question", "kind": "say", "real": true, "path": "demo/clips/real/product_question.wav", "duration_ms": 4320, "text": "What does error E2 mean on my blood pressure monitor?"}}
+{"t_ms": 82465.9, "kind": "speech_start", "turn": null, "data": {"segment": 3, "onset_ms": 82241.4, "during_answer": false}}
+{"t_ms": 82465.9, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 86785.5, "kind": "speech_end", "turn": null, "data": {"segment": 3, "speech_end_at_ms": 86209.4, "voiced_ms": 3936.0, "utterance_ms": 4480, "forced": false}}
+{"t_ms": 86785.5, "kind": "eou", "turn": 3, "data": {"speech_end_at_ms": 86209.4, "hangover_ms": 576, "audio_ms": 4480, "barge_in": false, "merged_from": []}}
+{"t_ms": 86785.5, "kind": "turn_start", "turn": 3, "data": {}}
+{"t_ms": 86785.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 86785.8, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 87454.0, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 668.1}}
+{"t_ms": 87454.1, "kind": "stt_done", "turn": 3, "data": {"text": "What does error E2 mean on my BP monitor?", "merged_text": "What does error E2 mean on my BP monitor?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 668}}
+{"t_ms": 87589.6, "kind": "filler", "turn": 3, "data": {"after_ms": 800.0}}
+{"t_ms": 87589.8, "kind": "playback_start", "turn": 3, "data": {"kind": "filler", "play_id": 3, "name": null, "at_ms": 87589.7}}
+{"t_ms": 87589.8, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 89606.5, "kind": "reply_ready", "turn": 3, "data": {"text": "Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1].", "intent": "product_question", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 89606.6, "kind": "answer_queued", "turn": 3, "data": {"sentences": ["Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1]."], "behind_filler": true}}
+{"t_ms": 89607.5, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 90012.1, "kind": "playback_item_done", "turn": 3, "data": {"kind": "filler"}}
+{"t_ms": 90012.1, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 91061.8, "kind": "tts_first_chunk", "turn": 3, "data": {"at_ms": 91061.6}}
+{"t_ms": 91062.0, "kind": "playback_start", "turn": 3, "data": {"kind": "answer", "play_id": 3, "name": null, "at_ms": 91061.8}}
+{"t_ms": 91062.0, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 91559.0, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 6, "ttfc_ms": 1454.1, "latency_ms": 1951.5}}
+{"t_ms": 114996.1, "kind": "playback_item_done", "turn": 3, "data": {"kind": "answer"}}
+{"t_ms": 114996.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 114996.2, "kind": "playback_done", "turn": 3, "data": {"play_id": 3}}
+{"t_ms": 114996.2, "kind": "turn_end", "turn": 3, "data": {"outcome": "answered", "wall_ms": 28211, "answer_played_ms": 23929}}
+{"t_ms": 114996.3, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 115421.2, "kind": "inject", "turn": null, "data": {"step": 3, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 115874.2, "kind": "speech_start", "turn": null, "data": {"segment": 4, "onset_ms": 115649.4, "during_answer": false}}
+{"t_ms": 115874.2, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 120129.6, "kind": "speech_end", "turn": null, "data": {"segment": 4, "speech_end_at_ms": 119553.4, "voiced_ms": 3840.0, "utterance_ms": 4416, "forced": false}}
+{"t_ms": 120129.6, "kind": "eou", "turn": 4, "data": {"speech_end_at_ms": 119553.4, "hangover_ms": 576, "audio_ms": 4416, "barge_in": false, "merged_from": []}}
+{"t_ms": 120129.6, "kind": "turn_start", "turn": 4, "data": {}}
+{"t_ms": 120129.7, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 120129.9, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 120730.8, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 600.9}}
+{"t_ms": 120730.9, "kind": "stt_done", "turn": 4, "data": {"text": "Hi, where is my order PN-10002?", "merged_text": "Hi, where is my order PN-10002?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 601}}
+{"t_ms": 120934.0, "kind": "filler", "turn": 4, "data": {"after_ms": 800.0}}
+{"t_ms": 120934.2, "kind": "playback_start", "turn": 4, "data": {"kind": "filler", "play_id": 4, "name": null, "at_ms": 120934.0}}
+{"t_ms": 120934.2, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 123356.7, "kind": "playback_item_done", "turn": 4, "data": {"kind": "filler"}}
+{"t_ms": 123356.8, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 123807.2, "kind": "reply_ready", "turn": 4, "data": {"text": "Your order PN-10002 (SKU SC-03) has been shipped via BlueDart express, with tracking number BD7781204IN. The carrier's estimated delivery date is 2026-10-22. You can use the tracking number to follow its progress.", "intent": "order_status", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 123807.3, "kind": "answer_queued", "turn": 4, "data": {"sentences": ["Your order PN-10002 (SKU SC-03) has been shipped via BlueDart express, with tracking number BD7781204IN. The carrier's estimated delivery date is 2026-10-22. You can use the tracking number to follow its progress."], "behind_filler": false}}
+{"t_ms": 123807.4, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 125000.5, "kind": "tts_first_chunk", "turn": 4, "data": {"at_ms": 125000.3}}
+{"t_ms": 125000.5, "kind": "playback_start", "turn": 4, "data": {"kind": "answer", "play_id": 4, "name": null, "at_ms": 125000.5}}
+{"t_ms": 125000.5, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 125491.1, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 5, "ttfc_ms": 1193.0, "latency_ms": 1683.7}}
+{"t_ms": 146942.5, "kind": "playback_item_done", "turn": 4, "data": {"kind": "answer"}}
+{"t_ms": 146942.5, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 146942.5, "kind": "playback_done", "turn": 4, "data": {"play_id": 4}}
+{"t_ms": 146942.5, "kind": "turn_end", "turn": 4, "data": {"outcome": "answered", "wall_ms": 26813, "answer_played_ms": 21937}}
+{"t_ms": 146942.6, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 147376.1, "kind": "inject", "turn": null, "data": {"step": 4, "clip": "talk_to_human", "kind": "say", "real": true, "path": "demo/clips/real/talk_to_human.wav", "duration_ms": 2560, "text": "I want to talk to a real person, please."}}
+{"t_ms": 147874.1, "kind": "speech_start", "turn": null, "data": {"segment": 5, "onset_ms": 147649.4, "during_answer": false}}
+{"t_ms": 147874.2, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 150433.6, "kind": "speech_end", "turn": null, "data": {"segment": 5, "speech_end_at_ms": 149857.4, "voiced_ms": 2240.0, "utterance_ms": 2720, "forced": false}}
+{"t_ms": 150433.7, "kind": "eou", "turn": 5, "data": {"speech_end_at_ms": 149857.4, "hangover_ms": 576, "audio_ms": 2720, "barge_in": false, "merged_from": []}}
+{"t_ms": 150433.7, "kind": "turn_start", "turn": 5, "data": {}}
+{"t_ms": 150433.7, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 150433.9, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 151043.4, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 609.5}}
+{"t_ms": 151043.8, "kind": "stt_done", "turn": 5, "data": {"text": "I want to talk to a real person please.", "merged_text": "I want to talk to a real person please.", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 610}}
+{"t_ms": 151237.5, "kind": "filler", "turn": 5, "data": {"after_ms": 800.0}}
+{"t_ms": 151237.8, "kind": "playback_start", "turn": 5, "data": {"kind": "filler", "play_id": 5, "name": null, "at_ms": 151237.6}}
+{"t_ms": 151237.8, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 152887.9, "kind": "reply_ready", "turn": 5, "data": {"text": "Human agents are available 9:00\u201321:00 IST, every day. A member of our team will pick it up shortly. I can't share details about how I'm set up internally.", "intent": "escalate_to_human", "blocked": false, "rewritten": true, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 152888.0, "kind": "answer_queued", "turn": 5, "data": {"sentences": ["Human agents are available 9:00\u201321:00 IST, every day. A member of our team will pick it up shortly. I can't share details about how I'm set up internally."], "behind_filler": true}}
+{"t_ms": 152888.1, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 153660.4, "kind": "playback_item_done", "turn": 5, "data": {"kind": "filler"}}
+{"t_ms": 153660.4, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 154141.0, "kind": "tts_first_chunk", "turn": 5, "data": {"at_ms": 154140.8}}
+{"t_ms": 154141.2, "kind": "playback_start", "turn": 5, "data": {"kind": "answer", "play_id": 5, "name": null, "at_ms": 154141.1}}
+{"t_ms": 154141.3, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 154392.2, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 3, "ttfc_ms": 1252.7, "latency_ms": 1504.2}}
+{"t_ms": 167077.6, "kind": "playback_item_done", "turn": 5, "data": {"kind": "answer"}}
+{"t_ms": 167077.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 167077.6, "kind": "playback_done", "turn": 5, "data": {"play_id": 5}}
+{"t_ms": 167077.6, "kind": "turn_end", "turn": 5, "data": {"outcome": "answered", "wall_ms": 16644, "answer_played_ms": 12934}}
+{"t_ms": 167077.7, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 167499.9, "kind": "inject", "turn": null, "data": {"step": 5, "clip": "product_question", "kind": "say", "real": true, "path": "demo/clips/real/product_question.wav", "duration_ms": 4320, "text": "What does error E2 mean on my blood pressure monitor?"}}
+{"t_ms": 168034.5, "kind": "speech_start", "turn": null, "data": {"segment": 6, "onset_ms": 167809.4, "during_answer": false}}
+{"t_ms": 168034.5, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 172353.2, "kind": "speech_end", "turn": null, "data": {"segment": 6, "speech_end_at_ms": 171777.4, "voiced_ms": 3936.0, "utterance_ms": 4480, "forced": false}}
+{"t_ms": 172353.3, "kind": "eou", "turn": 6, "data": {"speech_end_at_ms": 171777.4, "hangover_ms": 576, "audio_ms": 4480, "barge_in": false, "merged_from": []}}
+{"t_ms": 172353.3, "kind": "turn_start", "turn": 6, "data": {}}
+{"t_ms": 172353.4, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 172353.5, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 172908.1, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 554.5}}
+{"t_ms": 172908.2, "kind": "stt_done", "turn": 6, "data": {"text": "What does error E2 mean on my BP monitor?", "merged_text": "What does error E2 mean on my BP monitor?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 555}}
+{"t_ms": 173157.2, "kind": "filler", "turn": 6, "data": {"after_ms": 800.0}}
+{"t_ms": 173157.4, "kind": "playback_start", "turn": 6, "data": {"kind": "filler", "play_id": 6, "name": null, "at_ms": 173157.3}}
+{"t_ms": 173157.5, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 175579.9, "kind": "playback_item_done", "turn": 6, "data": {"kind": "filler"}}
+{"t_ms": 175579.9, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 175612.1, "kind": "reply_ready", "turn": 6, "data": {"text": "Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1].", "intent": "product_question", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 175612.1, "kind": "answer_queued", "turn": 6, "data": {"sentences": ["Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1]."], "behind_filler": false}}
+{"t_ms": 175612.2, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 177083.1, "kind": "tts_first_chunk", "turn": 6, "data": {"at_ms": 177082.9}}
+{"t_ms": 177083.3, "kind": "playback_start", "turn": 6, "data": {"kind": "answer", "play_id": 6, "name": null, "at_ms": 177083.2}}
+{"t_ms": 177083.3, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 177580.7, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 6, "ttfc_ms": 1470.7, "latency_ms": 1968.5}}
+{"t_ms": 200866.7, "kind": "playback_item_done", "turn": 6, "data": {"kind": "answer"}}
+{"t_ms": 200866.7, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 200866.7, "kind": "playback_done", "turn": 6, "data": {"play_id": 6}}
+{"t_ms": 200866.8, "kind": "turn_end", "turn": 6, "data": {"outcome": "answered", "wall_ms": 28513, "answer_played_ms": 23779}}
+{"t_ms": 200866.8, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 201298.9, "kind": "inject", "turn": null, "data": {"step": 6, "clip": "return_query", "kind": "say", "real": true, "path": "demo/clips/real/return_query.wav", "duration_ms": 5664, "text": "Can I return order PN-10004? I opened the box."}}
+{"t_ms": 201761.8, "kind": "speech_start", "turn": null, "data": {"segment": 7, "onset_ms": 201537.4, "during_answer": false}}
+{"t_ms": 201761.8, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 207426.4, "kind": "speech_end", "turn": null, "data": {"segment": 7, "speech_end_at_ms": 206849.4, "voiced_ms": 5088.0, "utterance_ms": 5824, "forced": false}}
+{"t_ms": 207426.5, "kind": "eou", "turn": 7, "data": {"speech_end_at_ms": 206849.4, "hangover_ms": 576, "audio_ms": 5824, "barge_in": false, "merged_from": []}}
+{"t_ms": 207426.5, "kind": "turn_start", "turn": 7, "data": {}}
+{"t_ms": 207426.5, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 207426.7, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 208097.3, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 670.5}}
+{"t_ms": 208097.5, "kind": "stt_done", "turn": 7, "data": {"text": "Can I return order PN-10004? I have opened the box.", "merged_text": "Can I return order PN-10004? I have opened the box.", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 671}}
+{"t_ms": 208230.5, "kind": "filler", "turn": 7, "data": {"after_ms": 800.0}}
+{"t_ms": 208230.7, "kind": "playback_start", "turn": 7, "data": {"kind": "filler", "play_id": 7, "name": null, "at_ms": 208230.6}}
+{"t_ms": 208230.7, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 210653.2, "kind": "playback_item_done", "turn": 7, "data": {"kind": "filler"}}
+{"t_ms": 210653.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 211256.7, "kind": "reply_ready", "turn": 7, "data": {"text": "Yes, your BP-200 in order PN-10004 is eligible for return, as it was delivered on 2026-10-10 and you're within the 15-day window ending 2026-10-25. A 10% restocking fee applies because the item was opened. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days.", "intent": "return_refund", "blocked": false, "rewritten": true, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 211256.7, "kind": "answer_queued", "turn": 7, "data": {"sentences": ["Yes, your BP-200 in order PN-10004 is eligible for return, as it was delivered on 2026-10-10 and you're within the 15-day window ending 2026-10-25. A 10% restocking fee applies because the item was opened. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days."], "behind_filler": false}}
+{"t_ms": 211256.8, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 212559.3, "kind": "tts_first_chunk", "turn": 7, "data": {"at_ms": 212559.1}}
+{"t_ms": 212559.5, "kind": "playback_start", "turn": 7, "data": {"kind": "answer", "play_id": 7, "name": null, "at_ms": 212559.4}}
+{"t_ms": 212559.6, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 213531.5, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 6, "ttfc_ms": 1302.3, "latency_ms": 2274.7}}
+{"t_ms": 246002.1, "kind": "playback_item_done", "turn": 7, "data": {"kind": "answer"}}
+{"t_ms": 246002.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 246002.2, "kind": "playback_done", "turn": 7, "data": {"play_id": 7}}
+{"t_ms": 246002.2, "kind": "turn_end", "turn": 7, "data": {"outcome": "answered", "wall_ms": 38577, "answer_played_ms": 33439}}
+{"t_ms": 246002.3, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 246435.8, "kind": "inject", "turn": null, "data": {"step": 7, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 246914.4, "kind": "speech_start", "turn": null, "data": {"segment": 8, "onset_ms": 246689.4, "during_answer": false}}
+{"t_ms": 246914.4, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 251170.0, "kind": "speech_end", "turn": null, "data": {"segment": 8, "speech_end_at_ms": 250593.4, "voiced_ms": 3840.0, "utterance_ms": 4416, "forced": false}}
+{"t_ms": 251170.1, "kind": "eou", "turn": 8, "data": {"speech_end_at_ms": 250593.4, "hangover_ms": 576, "audio_ms": 4416, "barge_in": false, "merged_from": []}}
+{"t_ms": 251170.1, "kind": "turn_start", "turn": 8, "data": {}}
+{"t_ms": 251170.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 251170.4, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 251929.8, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 759.4}}
+{"t_ms": 251930.0, "kind": "stt_done", "turn": 8, "data": {"text": "Hi, where is my order PN-10002?", "merged_text": "Hi, where is my order PN-10002?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 760}}
+{"t_ms": 251973.7, "kind": "filler", "turn": 8, "data": {"after_ms": 800.0}}
+{"t_ms": 251973.9, "kind": "playback_start", "turn": 8, "data": {"kind": "filler", "play_id": 8, "name": null, "at_ms": 251973.8}}
+{"t_ms": 251973.9, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 254396.5, "kind": "playback_item_done", "turn": 8, "data": {"kind": "filler"}}
+{"t_ms": 254396.5, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 255212.6, "kind": "reply_ready", "turn": 8, "data": {"text": "Your order PN-10002 (item SC-03) has been shipped via BlueDart express, with tracking number BD7781204IN. The carrier's estimated delivery date is 2026-10-22. It was placed on 2026-10-17 and is currently in transit.", "intent": "order_status", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 255212.7, "kind": "answer_queued", "turn": 8, "data": {"sentences": ["Your order PN-10002 (item SC-03) has been shipped via BlueDart express, with tracking number BD7781204IN. The carrier's estimated delivery date is 2026-10-22. It was placed on 2026-10-17 and is currently in transit."], "behind_filler": false}}
+{"t_ms": 255212.7, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 256556.0, "kind": "tts_first_chunk", "turn": 8, "data": {"at_ms": 256555.7}}
+{"t_ms": 256556.2, "kind": "playback_start", "turn": 8, "data": {"kind": "answer", "play_id": 8, "name": null, "at_ms": 256556.0}}
+{"t_ms": 256556.2, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 257095.4, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 5, "ttfc_ms": 1343.0, "latency_ms": 1882.6}}
+{"t_ms": 280456.6, "kind": "playback_item_done", "turn": 8, "data": {"kind": "answer"}}
+{"t_ms": 280456.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 280456.6, "kind": "playback_done", "turn": 8, "data": {"play_id": 8}}
+{"t_ms": 280456.6, "kind": "turn_end", "turn": 8, "data": {"outcome": "answered", "wall_ms": 29287, "answer_played_ms": 23897}}
+{"t_ms": 280456.7, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 280882.3, "kind": "inject", "turn": null, "data": {"step": 8, "clip": "product_question", "kind": "say", "real": true, "path": "demo/clips/real/product_question.wav", "duration_ms": 4320, "text": "What does error E2 mean on my blood pressure monitor?"}}
+{"t_ms": 281409.6, "kind": "speech_start", "turn": null, "data": {"segment": 9, "onset_ms": 281185.4, "during_answer": false}}
+{"t_ms": 281409.6, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 285730.1, "kind": "speech_end", "turn": null, "data": {"segment": 9, "speech_end_at_ms": 285153.4, "voiced_ms": 3936.0, "utterance_ms": 4480, "forced": false}}
+{"t_ms": 285730.2, "kind": "eou", "turn": 9, "data": {"speech_end_at_ms": 285153.4, "hangover_ms": 576, "audio_ms": 4480, "barge_in": false, "merged_from": []}}
+{"t_ms": 285730.2, "kind": "turn_start", "turn": 9, "data": {}}
+{"t_ms": 285730.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 285730.4, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 286416.5, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 686.1}}
+{"t_ms": 286416.7, "kind": "stt_done", "turn": 9, "data": {"text": "What does error E2 mean on my BP monitor?", "merged_text": "What does error E2 mean on my BP monitor?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 686}}
+{"t_ms": 286534.3, "kind": "filler", "turn": 9, "data": {"after_ms": 800.0}}
+{"t_ms": 286534.4, "kind": "playback_start", "turn": 9, "data": {"kind": "filler", "play_id": 9, "name": null, "at_ms": 286534.3}}
+{"t_ms": 286534.4, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 288957.0, "kind": "playback_item_done", "turn": 9, "data": {"kind": "filler"}}
+{"t_ms": 288957.0, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 289213.9, "kind": "reply_ready", "turn": 9, "data": {"text": "Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1].", "intent": "product_question", "blocked": false, "rewritten": false, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 289214.0, "kind": "answer_queued", "turn": 9, "data": {"sentences": ["Error E2 on the BP-200 indicates that movement or talking was detected during the measurement [2]. To resolve this, sit with your back supported, feet flat, and arm resting at heart level while staying still and quiet until the reading finishes [2]. If the error persists, you can contact support with the error code [1]."], "behind_filler": false}}
+{"t_ms": 289214.0, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 290486.8, "kind": "tts_first_chunk", "turn": 9, "data": {"at_ms": 290486.7}}
+{"t_ms": 290486.9, "kind": "playback_start", "turn": 9, "data": {"kind": "answer", "play_id": 9, "name": null, "at_ms": 290486.8}}
+{"t_ms": 290486.9, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 290975.0, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 6, "ttfc_ms": 1272.7, "latency_ms": 1761.0}}
+{"t_ms": 314179.3, "kind": "playback_item_done", "turn": 9, "data": {"kind": "answer"}}
+{"t_ms": 314179.3, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 314179.4, "kind": "playback_done", "turn": 9, "data": {"play_id": 9}}
+{"t_ms": 314179.4, "kind": "turn_end", "turn": 9, "data": {"outcome": "answered", "wall_ms": 28450, "answer_played_ms": 23689}}
+{"t_ms": 314179.4, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 314607.1, "kind": "inject", "turn": null, "data": {"step": 9, "clip": "return_query", "kind": "say", "real": true, "path": "demo/clips/real/return_query.wav", "duration_ms": 5664, "text": "Can I return order PN-10004? I opened the box."}}
+{"t_ms": 315073.4, "kind": "speech_start", "turn": null, "data": {"segment": 10, "onset_ms": 314849.4, "during_answer": false}}
+{"t_ms": 315073.4, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 320737.5, "kind": "speech_end", "turn": null, "data": {"segment": 10, "speech_end_at_ms": 320161.4, "voiced_ms": 5088.0, "utterance_ms": 5824, "forced": false}}
+{"t_ms": 320737.5, "kind": "eou", "turn": 10, "data": {"speech_end_at_ms": 320161.4, "hangover_ms": 576, "audio_ms": 5824, "barge_in": false, "merged_from": []}}
+{"t_ms": 320737.5, "kind": "turn_start", "turn": 10, "data": {}}
+{"t_ms": 320737.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 320737.8, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 321423.0, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 685.2}}
+{"t_ms": 321423.2, "kind": "stt_done", "turn": 10, "data": {"text": "Can I return order PN-10004? I have opened the box.", "merged_text": "Can I return order PN-10004? I have opened the box.", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 685}}
+{"t_ms": 321548.0, "kind": "filler", "turn": 10, "data": {"after_ms": 800.0}}
+{"t_ms": 321548.1, "kind": "playback_start", "turn": 10, "data": {"kind": "filler", "play_id": 10, "name": null, "at_ms": 321548.0}}
+{"t_ms": 321548.1, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 323969.6, "kind": "playback_item_done", "turn": 10, "data": {"kind": "filler"}}
+{"t_ms": 323969.7, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 324158.9, "kind": "reply_ready", "turn": 10, "data": {"text": "Yes, your BP-200 (order PN-10004) is eligible for return since it was delivered on 2026-10-10 and you're within the 15-day window, which ends on 2026-10-25. A 10% restocking fee applies to opened items. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days.", "intent": "return_refund", "blocked": false, "rewritten": true, "trace_id": "00000000000000000000000000000000"}}
+{"t_ms": 324158.9, "kind": "answer_queued", "turn": 10, "data": {"sentences": ["Yes, your BP-200 (order PN-10004) is eligible for return since it was delivered on 2026-10-10 and you're within the 15-day window, which ends on 2026-10-25. A 10% restocking fee applies to opened items. The final refund amount is confirmed only after the item passes inspection at our warehouse; the refund then reaches your original payment method within 5-7 business days."], "behind_filler": false}}
+{"t_ms": 324159.0, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 325477.2, "kind": "tts_first_chunk", "turn": 10, "data": {"at_ms": 325477.0}}
+{"t_ms": 325477.4, "kind": "playback_start", "turn": 10, "data": {"kind": "answer", "play_id": 10, "name": null, "at_ms": 325477.2}}
+{"t_ms": 325477.4, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 328514.0, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 8, "ttfc_ms": 1318.0, "latency_ms": 4355.0}}
+{"t_ms": 359554.2, "kind": "playback_item_done", "turn": 10, "data": {"kind": "answer"}}
+{"t_ms": 359554.3, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 359554.3, "kind": "playback_done", "turn": 10, "data": {"play_id": 10}}
+{"t_ms": 359554.3, "kind": "turn_end", "turn": 10, "data": {"outcome": "answered", "wall_ms": 38817, "answer_played_ms": 34072}}
+{"t_ms": 359554.4, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 361483.8, "kind": "vad_stats", "turn": null, "data": {"frames": 11296, "vad_ms_mean": 0.725, "vad_ms_p95": 1.136, "vad_ms_max": 21.445, "max_frame_lag_ms": 7.9}}
+{"t_ms": 361483.9, "kind": "call_end", "turn": null, "data": {"outcomes": {"1": "answered", "2": "answered", "3": "answered", "4": "answered", "5": "answered", "6": "answered", "7": "answered", "8": "answered", "9": "answered", "10": "answered"}, "violations": []}}

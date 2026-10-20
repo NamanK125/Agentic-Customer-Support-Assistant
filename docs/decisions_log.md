@@ -275,3 +275,17 @@ Format:
 
 [2026-10-19 17:25] DECISION: Trimmed the submission to what the brief asks for. Removed the browser test console (and the call-intake and sentence TTS cache that only it used), the Docker/nginx deploy files and the endpoint-probe scripts. Voice is demonstrated through the scripted scenario runs in demo/runs/ and the CLI mic mode.
   WHY: They were development conveniences, not deliverables, and each was more surface for a reviewer to read without adding evidence for any requirement.
+
+[2026-10-20 09:10] FINDING: The live mic and the clip recorder waited forever without hearing speech. The input stream opened normally but every sample was exactly 0: macOS was feeding silence because the editor's terminal had no microphone permission. Both now stop after ~1.5 s of pure digital zeros with instructions, since a real mic is never digitally silent.
+
+[2026-10-20 09:25] DECISION: Moved to Groq for all evidence runs. Groq has retired llama-3.3-70b-versatile and llama-3.1-8b-instant; the available chat models are qwen/qwen3.8-27b, openai/gpt-oss-20b and openai/gpt-oss-120b. Probed each for latency, strict JSON schema and tool calling: all three pass, Qwen with reasoning_effort=none is fastest (~0.2-0.3 s), gpt-oss 0.4-0.7 s.
+  WHY: The brief names Groq; the in-house runs were a development stand-in.
+  ABANDONED: Turning Qwen3 thinking off with chat_template_kwargs (our vLLM setting). Groq rejects it with a 400, which with the old .env would have sent every LLM call to the fallback path. Replaced by a reasoning_effort setting; gpt-oss can't go below "low", so it gets "low".
+
+[2026-10-20 09:30] DECISION: Roles spread across three models: router on gpt-oss-20b, input/output guards on gpt-oss-120b, agent on qwen3.8-27b. Circuit breaker is now per model, not per client.
+  WHY: The free tier caps tokens per minute per model (8k). One turn is ~3k tokens (guard, router, agent, output rubric), so a single model allows ~2.5 turns/min; the third smoke turn already hit 429s and fell back. Three buckets give ~6-7 turns/min. The guard gets the strongest model because it is the safety check; the agent stays on the model family its prompts were tuned on. A shared breaker would let a throttled router model fail-fast the guard and agent too.
+  ALTERNATIVES CONSIDERED: More Groq keys (the brief allows them; LLM_API_KEYS_EXTRA already rotates on 429) — still the right fix for real volume, but needs more accounts.
+  UNSURE: Three models means three behaviours; a cross-model routing or guard difference would show up in the eval, not in the smoke run.
+
+[2026-10-20 09:50] FINDING: On the first Groq run with real recordings, whisper-large-v3-turbo dropped a digit from every spoken order id ("PN-10002" -> "PN-1002", 3/3 clips), so the agent asked for the order id again. Every scenario still passed, because the scenarios check turn-taking, not answer content. whisper-large-v3 with the vocabulary prompt got 3/3 right at the same latency (~0.5-0.7 s); without the prompt both models fail. Switched STT_MODEL to whisper-large-v3 and re-ran.
+  UNSURE: Three clips from one speaker. The order-id path still depends on STT digits (red-team #17).

@@ -1,7 +1,11 @@
 """Text-side eval against the configured LLM: routing accuracy, guardrail recall / false
 positives, and classifier-cache hit rate. Writes eval/results/text_eval_<date>.md + .json.
 
-    uv run python eval/run_text_eval.py [--concurrency 8] [--limit N]
+    uv run python eval/run_text_eval.py [--concurrency 8] [--limit N] [--rows-per-min R]
+
+--rows-per-min paces row starts to stay under a provider's tokens-per-minute cap (Groq's free
+tier allows 8k tokens/min per model; a guard + router row is ~1k tokens), so rows measure the
+LLM path instead of the rate-limit fallback.
 
 Routing rows go through the input guard first, exactly like production (a routing row the guard
 blocks is reported separately, not counted as a correct or wrong route). The routing set is
@@ -18,6 +22,7 @@ from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 
+from support_assistant.config import get_settings
 from support_assistant.contracts import BlockedMessage, CheckedMessage, RawMessage
 from support_assistant.harness.factory import build_pipeline
 
@@ -29,11 +34,23 @@ def load(name: str) -> list[dict]:
     return [json.loads(line) for line in (DATA / name).open() if line.strip()]
 
 
+PACE_S = 0.0  # seconds between row starts; set from --rows-per-min
+_next_start = 0.0
+
+
 async def bounded(n: int, coros):
     sem = asyncio.Semaphore(n)
+    lock = asyncio.Lock()
 
     async def run(c):
+        global _next_start
         async with sem:
+            if PACE_S:
+                async with lock:
+                    now = time.monotonic()
+                    wait = max(0.0, _next_start - now)
+                    _next_start = max(now, _next_start) + PACE_S
+                await asyncio.sleep(wait)
             return await c
 
     return await asyncio.gather(*(run(c) for c in coros))
@@ -77,7 +94,11 @@ async def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--concurrency", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--rows-per-min", type=float, default=0.0)
     args = ap.parse_args()
+    global PACE_S
+    PACE_S = 60.0 / args.rows_per_min if args.rows_per_min else 0.0
+    s = get_settings()
     p = await asyncio.to_thread(build_pipeline)
     lim = (lambda xs: xs[: args.limit]) if args.limit else (lambda xs: xs)
 
@@ -126,7 +147,9 @@ async def main() -> None:
 
     result = {
         "date": str(date.today()),
-        "model": {"router": p.router._model_id},  # noqa: SLF001
+        "model": {r: s.model_for(r) for r in ("router", "guard", "agent")},
+        "llm_base_url": s.llm_base_url,
+        "settings": {"concurrency": args.concurrency, "rows_per_min": args.rows_per_min},
         "routing": routing_res,
         "guard_generic_deepset": guard_metrics(inj_rows),
         "guard_pulsenest_adversarial": guard_metrics(dom_rows),

@@ -18,15 +18,24 @@ class Settings(BaseSettings):
     llm_base_url: str = "https://api.groq.com/openai/v1"
     llm_api_key: str = ""
     llm_api_keys_extra: str = ""
-    llm_model: str = "llama-3.3-70b-versatile"
-    # Routing is a short classification: the 8B model is faster, cheaper and has higher limits
-    llm_model_router: str | None = "llama-3.1-8b-instant"
-    llm_model_guard: str | None = None
+    # Groq retired llama-3.3-70b-versatile / llama-3.1-8b-instant (checked 2026-10-20). All three
+    # models below do strict JSON schema and tool calling in 0.2-0.7 s per short call.
+    # Roles are spread across models because Groq's free tier caps tokens per minute PER MODEL
+    # (8k): one turn is ~3k tokens, so a single model allows ~2.5 turns/min; three allow ~6-7.
+    # Agent: Qwen3.8 27B, the model family the answer prompts were tuned on (in-house vLLM).
+    llm_model: str = "qwen/qwen3.8-27b"
+    # Per-role overrides; None = llm_model.
+    llm_model_router: str | None = "openai/gpt-oss-20b"  # short classification
+    llm_model_guard: str | None = "openai/gpt-oss-120b"  # the strongest model on the safety checks
     llm_model_agent: str | None = None
     # Outputs are always parsed tolerantly and validated with pydantic, whichever mode is used
-    llm_structured_output: Literal["json_schema", "json_object", "none"] = "json_object"
+    llm_structured_output: Literal["json_schema", "json_object", "none"] = "json_schema"
+    # Groq: `reasoning_effort`. "none" turns Qwen3 thinking off; gpt-oss can't go below "low",
+    # so it gets "low". Empty = don't send it.
+    llm_reasoning_effort: str | None = "none"
     # vLLM + Qwen3-style thinking models: send chat_template_kwargs.enable_thinking=false. Without
-    # it the model writes its reasoning into `content` and is ~8x slower per call. Off for Groq.
+    # it the model writes its reasoning into `content` and is ~8x slower per call. Groq rejects
+    # this field (400); use llm_reasoning_effort there.
     llm_disable_thinking: bool = False
     llm_timeout_s: float = 20.0
     llm_max_retries: int = 2
@@ -50,7 +59,10 @@ class Settings(BaseSettings):
     # Voice: STT (Groq Whisper by default, local faster-whisper int8 as fallback)
     stt_base_url: str = "https://api.groq.com/openai/v1"
     stt_api_key: str = ""  # empty = reuse llm_api_key when stt_base_url is the LLM endpoint
-    stt_model: str = "whisper-large-v3-turbo"
+    # Full large-v3, not turbo: on our real recordings turbo dropped a digit from every order id
+    # ("PN-10002" -> "PN-1002", 3/3 clips, with or without the vocabulary prompt); large-v3 with
+    # the prompt got 3/3 right at the same Groq latency (~0.5-0.7 s per clip).
+    stt_model: str = "whisper-large-v3"
     stt_language: str | None = "en"  # None = auto-detect (slower, needed for Hinglish)
     stt_timeout_s: float = 4.0  # Groq: a short clip normally transcribes in well under 1 s
     stt_local_timeout_s: float = 10.0  # last resort, so it gets longer

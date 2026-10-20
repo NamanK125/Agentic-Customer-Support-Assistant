@@ -120,9 +120,28 @@ class LLMClient:
         self._slots: dict[str, asyncio.Semaphore] = {
             r: asyncio.Semaphore(self._s.llm_max_concurrency) for r in ("router", "guard", "agent")
         }
-        self._breaker = CircuitBreaker(
-            self._s.llm_circuit_failures, self._s.llm_circuit_cooldown_s
-        )
+        # One breaker per model: rate limits and outages are per model (Groq's token budget is
+        # per model), so a throttled router model must not fail-fast the guard and agent.
+        self._breakers: dict[str, CircuitBreaker] = {}
+
+    def _breaker_for(self, model: str) -> CircuitBreaker:
+        if model not in self._breakers:
+            self._breakers[model] = CircuitBreaker(
+                self._s.llm_circuit_failures, self._s.llm_circuit_cooldown_s
+            )
+        return self._breakers[model]
+
+    @property
+    def _breaker(self) -> CircuitBreaker:
+        """The default model's breaker (single-model setups and tests)."""
+        return self._breaker_for(self._s.llm_model)
+
+    def _reasoning_effort(self, model: str) -> str | None:
+        effort = self._s.llm_reasoning_effort
+        # gpt-oss always reasons; its lowest setting is "low" ("none" is a 400)
+        if effort == "none" and "gpt-oss" in model:
+            return "low"
+        return effort
 
     def _client(self) -> AsyncOpenAI:
         if self._key_idx not in self._clients:
@@ -174,8 +193,13 @@ class LLMClient:
                 kwargs["tool_choice"] = tool_choice
         if (rf := self._response_format(json_schema)) is not None:
             kwargs["response_format"] = rf
+        extra: dict[str, Any] = {}
+        if effort := self._reasoning_effort(model):
+            extra["reasoning_effort"] = effort
         if self._s.llm_disable_thinking:
-            kwargs["extra_body"] = {"chat_template_kwargs": {"enable_thinking": False}}
+            extra["chat_template_kwargs"] = {"enable_thinking": False}
+        if extra:
+            kwargs["extra_body"] = extra
 
         with _tracer.start_as_current_span(f"chat {model}") as span:
             span.set_attribute("gen_ai.operation.name", "chat")
@@ -184,7 +208,8 @@ class LLMClient:
             span.set_attribute("app.llm.role", role)
             span.set_attribute("server.address", self._s.llm_base_url)
             start = time.perf_counter()
-            if not self._breaker.allow():
+            breaker = self._breaker_for(model)
+            if not breaker.allow():
                 # Fail fast: callers have deterministic fallbacks, so during an outage a turn
                 # should reach them in microseconds, not after seconds of retries per call.
                 _errors.add(1, {"role": role, "error": "CircuitOpen"})
@@ -197,12 +222,12 @@ class LLMClient:
                         "app.llm.queue_wait_ms", (time.perf_counter() - start) * 1000
                     )
                     resp = await self._call_with_retries(kwargs, span)
-                self._breaker.record(ok=True)
+                breaker.record(ok=True)
             except Exception as exc:
                 # A 4xx means our request was wrong (e.g. tools sent to a server without a tool
                 # parser), not that the server is down, so it must not trip the breaker for
                 # every other caller.
-                self._breaker.record(ok=isinstance(exc, _CLIENT_ERRORS))
+                breaker.record(ok=isinstance(exc, _CLIENT_ERRORS))
                 _errors.add(1, {"role": role, "error": type(exc).__name__})
                 span.record_exception(exc)
                 span.set_status(Status(StatusCode.ERROR, str(exc)))

@@ -1,0 +1,115 @@
+{
+  "definition": {
+    "start": "speech_end_at = end of the caller's last voiced 32 ms frame",
+    "to_first_audio": "first sink write of any assistant audio (filler included)",
+    "to_first_answer_audio": "first sink write of the answer itself",
+    "percentiles": "nearest-rank"
+  },
+  "summary": {
+    "to_first_audio": {
+      "n": 3,
+      "p50": 1380.7,
+      "p95": 1381.2
+    },
+    "to_first_answer_audio": {
+      "n": 3,
+      "p50": 3803.4,
+      "p95": 3803.6
+    },
+    "stages": {
+      "hangover": {
+        "n": 3,
+        "p50": 576.0,
+        "p95": 576.0
+      },
+      "stt": {
+        "n": 3,
+        "p50": 606.9,
+        "p95": 692.3
+      },
+      "llm": {
+        "n": 3,
+        "p50": 601.1,
+        "p95": 601.3
+      },
+      "tts": {
+        "n": 3,
+        "p50": 1215.5,
+        "p95": 1246.4
+      },
+      "playout": {
+        "n": 3,
+        "p50": 864.4,
+        "p95": 1323.3
+      }
+    }
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "speech_end_at": 4833.4,
+      "eou_at": 5409.4,
+      "stt_done": 5956.2,
+      "reply_ready": 6557.0,
+      "tts_first_chunk": 7772.6,
+      "first_audio_played": 6214.5,
+      "first_answer_audio_played": 8637.0,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 546.8,
+        "llm": 600.8,
+        "tts": 1215.5,
+        "playout": 864.4,
+        "to_first_audio": 1381.2,
+        "to_first_answer_audio": 3803.6
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 3804 ms = hangover 576 + stt 547 + llm 601 + tts 1216 + playout 864 ms; dominated by tts (32%)"
+    },
+    {
+      "turn": 2,
+      "speech_end_at": 35073.4,
+      "eou_at": 35649.4,
+      "stt_done": 36341.7,
+      "reply_ready": 36942.8,
+      "tts_first_chunk": 38189.1,
+      "first_audio_played": 36454.1,
+      "first_answer_audio_played": 38876.7,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 692.3,
+        "llm": 601.1,
+        "tts": 1246.4,
+        "playout": 687.6,
+        "to_first_audio": 1380.7,
+        "to_first_answer_audio": 3803.4
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 3803 ms = hangover 576 + stt 692 + llm 601 + tts 1246 + playout 688 ms; dominated by tts (33%)"
+    },
+    {
+      "turn": 3,
+      "speech_end_at": 68129.4,
+      "eou_at": 68705.4,
+      "stt_done": 69312.3,
+      "reply_ready": 69913.6,
+      "tts_first_chunk": 70606.7,
+      "first_audio_played": 69507.3,
+      "first_answer_audio_played": 71930.0,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 606.9,
+        "llm": 601.3,
+        "tts": 693.1,
+        "playout": 1323.3,
+        "to_first_audio": 1377.9,
+        "to_first_answer_audio": 3800.6
+      },
+      "explain": "first audio 1378 ms (filler); answer audio 3801 ms = hangover 576 + stt 607 + llm 601 + tts 693 + playout 1323 ms; dominated by playout (35%)"
+    }
+  ]
+}

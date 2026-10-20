@@ -1,0 +1,269 @@
+{
+  "definition": {
+    "start": "speech_end_at = end of the caller's last voiced 32 ms frame",
+    "to_first_audio": "first sink write of any assistant audio (filler included)",
+    "to_first_answer_audio": "first sink write of the answer itself",
+    "percentiles": "nearest-rank"
+  },
+  "summary": {
+    "to_first_audio": {
+      "n": 10,
+      "p50": 1380.5,
+      "p95": 1386.7
+    },
+    "to_first_answer_audio": {
+      "n": 10,
+      "p50": 5315.9,
+      "p95": 6546.1
+    },
+    "stages": {
+      "hangover": {
+        "n": 10,
+        "p50": 576.0,
+        "p95": 576.0
+      },
+      "stt": {
+        "n": 10,
+        "p50": 668.7,
+        "p95": 760.6
+      },
+      "llm": {
+        "n": 10,
+        "p50": 2754.7,
+        "p95": 4066.2
+      },
+      "tts": {
+        "n": 10,
+        "p50": 1272.8,
+        "p95": 1470.8
+      },
+      "playout": {
+        "n": 10,
+        "p50": 0.3,
+        "p95": 0.4
+      }
+    }
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "speech_end_at": 4833.4,
+      "eou_at": 5409.4,
+      "stt_done": 6056.7,
+      "reply_ready": 8811.4,
+      "tts_first_chunk": 9903.7,
+      "first_audio_played": 6214.2,
+      "first_answer_audio_played": 9904.1,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 647.3,
+        "llm": 2754.7,
+        "tts": 1092.3,
+        "playout": 0.4,
+        "to_first_audio": 1380.8,
+        "to_first_answer_audio": 5070.7
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 5071 ms = hangover 576 + stt 647 + llm 2755 + tts 1092 + playout 0 ms; dominated by llm (54%)"
+    },
+    {
+      "turn": 2,
+      "speech_end_at": 39937.4,
+      "eou_at": 40513.4,
+      "stt_done": 41202.2,
+      "reply_ready": 45268.4,
+      "tts_first_chunk": 46483.2,
+      "first_audio_played": 41317.8,
+      "first_answer_audio_played": 46483.5,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 688.9,
+        "llm": 4066.2,
+        "tts": 1214.8,
+        "playout": 0.3,
+        "to_first_audio": 1380.5,
+        "to_first_answer_audio": 6546.1
+      },
+      "explain": "first audio 1380 ms (filler); answer audio 6546 ms = hangover 576 + stt 689 + llm 4066 + tts 1215 + playout 0 ms; dominated by llm (62%)"
+    },
+    {
+      "turn": 3,
+      "speech_end_at": 86209.4,
+      "eou_at": 86785.4,
+      "stt_done": 87454.1,
+      "reply_ready": 89606.5,
+      "tts_first_chunk": 91061.6,
+      "first_audio_played": 87589.7,
+      "first_answer_audio_played": 91061.8,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 668.7,
+        "llm": 2152.4,
+        "tts": 1455.1,
+        "playout": 0.2,
+        "to_first_audio": 1380.3,
+        "to_first_answer_audio": 4852.5
+      },
+      "explain": "first audio 1380 ms (filler); answer audio 4852 ms = hangover 576 + stt 669 + llm 2152 + tts 1455 + playout 0 ms; dominated by llm (44%)"
+    },
+    {
+      "turn": 4,
+      "speech_end_at": 119553.4,
+      "eou_at": 120129.4,
+      "stt_done": 120730.9,
+      "reply_ready": 123807.2,
+      "tts_first_chunk": 125000.3,
+      "first_audio_played": 120934.0,
+      "first_answer_audio_played": 125000.5,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 601.5,
+        "llm": 3076.3,
+        "tts": 1193.2,
+        "playout": 0.1,
+        "to_first_audio": 1380.7,
+        "to_first_answer_audio": 5447.1
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 5447 ms = hangover 576 + stt 602 + llm 3076 + tts 1193 + playout 0 ms; dominated by llm (56%)"
+    },
+    {
+      "turn": 5,
+      "speech_end_at": 149857.4,
+      "eou_at": 150433.4,
+      "stt_done": 151043.7,
+      "reply_ready": 152887.9,
+      "tts_first_chunk": 154140.8,
+      "first_audio_played": 151237.6,
+      "first_answer_audio_played": 154141.1,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 610.4,
+        "llm": 1844.1,
+        "tts": 1253.0,
+        "playout": 0.2,
+        "to_first_audio": 1380.3,
+        "to_first_answer_audio": 4283.7
+      },
+      "explain": "first audio 1380 ms (filler); answer audio 4284 ms = hangover 576 + stt 610 + llm 1844 + tts 1253 + playout 0 ms; dominated by llm (43%)"
+    },
+    {
+      "turn": 6,
+      "speech_end_at": 171777.4,
+      "eou_at": 172353.4,
+      "stt_done": 172908.2,
+      "reply_ready": 175612.0,
+      "tts_first_chunk": 177082.9,
+      "first_audio_played": 173157.3,
+      "first_answer_audio_played": 177083.2,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 554.8,
+        "llm": 2703.9,
+        "tts": 1470.8,
+        "playout": 0.3,
+        "to_first_audio": 1379.9,
+        "to_first_answer_audio": 5305.8
+      },
+      "explain": "first audio 1380 ms (filler); answer audio 5306 ms = hangover 576 + stt 555 + llm 2704 + tts 1471 + playout 0 ms; dominated by llm (51%)"
+    },
+    {
+      "turn": 7,
+      "speech_end_at": 206849.4,
+      "eou_at": 207425.4,
+      "stt_done": 208097.4,
+      "reply_ready": 211256.6,
+      "tts_first_chunk": 212559.1,
+      "first_audio_played": 208230.6,
+      "first_answer_audio_played": 212559.4,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 672.1,
+        "llm": 3159.2,
+        "tts": 1302.5,
+        "playout": 0.3,
+        "to_first_audio": 1381.2,
+        "to_first_answer_audio": 5710.0
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 5710 ms = hangover 576 + stt 672 + llm 3159 + tts 1302 + playout 0 ms; dominated by llm (55%)"
+    },
+    {
+      "turn": 8,
+      "speech_end_at": 250593.4,
+      "eou_at": 251169.4,
+      "stt_done": 251930.0,
+      "reply_ready": 255212.5,
+      "tts_first_chunk": 256555.7,
+      "first_audio_played": 251973.8,
+      "first_answer_audio_played": 256556.0,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 760.6,
+        "llm": 3282.6,
+        "tts": 1343.2,
+        "playout": 0.3,
+        "to_first_audio": 1380.4,
+        "to_first_answer_audio": 5962.7
+      },
+      "explain": "first audio 1380 ms (filler); answer audio 5963 ms = hangover 576 + stt 761 + llm 3283 + tts 1343 + playout 0 ms; dominated by llm (55%)"
+    },
+    {
+      "turn": 9,
+      "speech_end_at": 285153.4,
+      "eou_at": 285729.4,
+      "stt_done": 286416.7,
+      "reply_ready": 289213.9,
+      "tts_first_chunk": 290486.7,
+      "first_audio_played": 286534.3,
+      "first_answer_audio_played": 290486.8,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 687.3,
+        "llm": 2797.2,
+        "tts": 1272.8,
+        "playout": 0.1,
+        "to_first_audio": 1381.0,
+        "to_first_answer_audio": 5333.5
+      },
+      "explain": "first audio 1381 ms (filler); answer audio 5334 ms = hangover 576 + stt 687 + llm 2797 + tts 1273 + playout 0 ms; dominated by llm (52%)"
+    },
+    {
+      "turn": 10,
+      "speech_end_at": 320161.4,
+      "eou_at": 320737.4,
+      "stt_done": 321423.1,
+      "reply_ready": 324158.9,
+      "tts_first_chunk": 325477.0,
+      "first_audio_played": 321548.0,
+      "first_answer_audio_played": 325477.2,
+      "first_audio_kind": "filler",
+      "excluded": null,
+      "breakdown_ms": {
+        "hangover": 576.0,
+        "stt": 685.8,
+        "llm": 2735.7,
+        "tts": 1318.1,
+        "playout": 0.3,
+        "to_first_audio": 1386.7,
+        "to_first_answer_audio": 5315.9
+      },
+      "explain": "first audio 1387 ms (filler); answer audio 5316 ms = hangover 576 + stt 686 + llm 2736 + tts 1318 + playout 0 ms; dominated by llm (51%)"
+    }
+  ]
+}

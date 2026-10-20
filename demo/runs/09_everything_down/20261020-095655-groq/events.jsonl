@@ -1,0 +1,93 @@
+{"t_ms": 0.0, "kind": "scenario_start", "turn": null, "data": {"name": "09_everything_down", "description": "Resilience (scripted): (a) every TTS provider refuses: the answer can't be spoken, the pre-rendered 'trouble' prompt plays and the text is logged; (b) every STT provider hangs: the turn is bounded by timeouts and 'didn't catch that' plays; (c) faults cleared: the call recovers. No hang, no crashed turn.", "providers": "real", "vad": "silero", "stt": ["groq-whisper", "local-whisper"], "tts": ["inhouse", "edge"], "canned": {"didnt_catch": "cache:inhouse", "one_moment": "cache:inhouse", "trouble": "cache:inhouse"}, "responder": "scripted", "reply_latency_ms": 600, "config": {"stt_timeout_s": 15.0}}}
+{"t_ms": 0.1, "kind": "call_start", "turn": null, "data": {"config": {"endpointer": {"threshold": 0.5, "neg_threshold": 0.35, "min_speech_ms": 250.0, "hangover_ms": 560.0, "pre_roll_ms": 320.0, "tail_ms": 160.0, "max_utterance_ms": 15000.0}, "barge_in": {"threshold": 0.5, "duck_ms": 160.0, "confirm_ms": 560.0, "window_ms": 1200.0, "unduck_after_ms": 320.0, "duck_gain": 0.3}, "session_id": "voice-09_everything_down-ebd95c", "filler_after_ms": 800.0, "stt_timeout_s": 15.0, "responder_timeout_s": 40.0, "greeting_timeout_s": 10.0, "tts_first_chunk_timeout_s": 12.0, "tts_chunk_timeout_s": 10.0, "sink_slack_s": 2.0, "stop_timeout_s": 1.0, "merge_gap_ms": 200.0, "split_replies": false}}}
+{"t_ms": 721.8, "kind": "fault_injected", "turn": null, "data": {"target": "tts", "mode": "refuse"}}
+{"t_ms": 1140.1, "kind": "inject", "turn": null, "data": {"step": 1, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 1570.4, "kind": "speech_start", "turn": null, "data": {"segment": 1, "onset_ms": 1345.3, "during_answer": false}}
+{"t_ms": 1570.5, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 5858.4, "kind": "speech_end", "turn": null, "data": {"segment": 1, "speech_end_at_ms": 5281.3, "voiced_ms": 3872.0, "utterance_ms": 4448, "forced": false}}
+{"t_ms": 5858.5, "kind": "eou", "turn": 1, "data": {"speech_end_at_ms": 5281.3, "hangover_ms": 576, "audio_ms": 4448, "barge_in": false, "merged_from": []}}
+{"t_ms": 5858.5, "kind": "turn_start", "turn": 1, "data": {}}
+{"t_ms": 5858.5, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 5858.6, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 6660.4, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 801.7}}
+{"t_ms": 6660.7, "kind": "stt_done", "turn": 1, "data": {"text": "Hi, where is my order PN-10002?", "merged_text": "Hi, where is my order PN-10002?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 802}}
+{"t_ms": 6661.7, "kind": "filler", "turn": 1, "data": {"after_ms": 800.0}}
+{"t_ms": 6661.9, "kind": "playback_start", "turn": 1, "data": {"kind": "filler", "play_id": 1, "name": null, "at_ms": 6661.8}}
+{"t_ms": 6661.9, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 7262.8, "kind": "reply_ready", "turn": 1, "data": {"text": "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.", "intent": "scripted", "blocked": false, "rewritten": false, "trace_id": null}}
+{"t_ms": 7262.9, "kind": "answer_queued", "turn": 1, "data": {"sentences": ["Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."], "behind_filler": true}}
+{"t_ms": 7262.9, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 7263.0, "kind": "provider_error", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "error": "inhouse: connection refused (injected)", "retryable": true, "chunks_already_sent": 0, "latency_ms": 0.1}}
+{"t_ms": 7263.0, "kind": "provider_fallback", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "to": "edge", "error": "inhouse: connection refused (injected)", "restart": false, "chunks_already_sent": 0}}
+{"t_ms": 7263.0, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "edge", "attempt": 1}}
+{"t_ms": 7263.0, "kind": "provider_error", "turn": null, "data": {"kind": "tts", "provider": "edge", "error": "edge: connection refused (injected)", "retryable": true, "chunks_already_sent": 0, "latency_ms": 0.0}}
+{"t_ms": 9084.5, "kind": "playback_item_done", "turn": 1, "data": {"kind": "filler"}}
+{"t_ms": 9084.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 9084.6, "kind": "tts_failed", "turn": 1, "data": {"error": "TTSError: fallback-tts: all TTS providers failed: inhouse:error, edge:error", "stage": "tts"}}
+{"t_ms": 9084.6, "kind": "assistant_text_only", "turn": 1, "data": {"text": "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."}}
+{"t_ms": 9084.6, "kind": "turn_end", "turn": 1, "data": {"outcome": "tts_failed", "wall_ms": 3227, "error": "TTSError: fallback-tts: all TTS providers failed: inhouse:error, edge:error", "answer_played_ms": 0}}
+{"t_ms": 9084.7, "kind": "canned", "turn": 1, "data": {"name": "trouble"}}
+{"t_ms": 9084.8, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 9085.0, "kind": "playback_start", "turn": 1, "data": {"kind": "canned", "play_id": 2, "name": "trouble", "at_ms": 9084.8}}
+{"t_ms": 9085.0, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 15658.4, "kind": "playback_item_done", "turn": 1, "data": {"kind": "canned"}}
+{"t_ms": 15658.5, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 15658.5, "kind": "playback_done", "turn": 1, "data": {"play_id": 2}}
+{"t_ms": 16091.7, "kind": "fault_cleared", "turn": null, "data": {"target": "tts"}}
+{"t_ms": 16509.8, "kind": "fault_injected", "turn": null, "data": {"target": "stt", "mode": "hang"}}
+{"t_ms": 16928.2, "kind": "inject", "turn": null, "data": {"step": 4, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 17378.0, "kind": "speech_start", "turn": null, "data": {"segment": 2, "onset_ms": 17153.3, "during_answer": false}}
+{"t_ms": 17378.0, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 21634.3, "kind": "speech_end", "turn": null, "data": {"segment": 2, "speech_end_at_ms": 21057.3, "voiced_ms": 3840.0, "utterance_ms": 4416, "forced": false}}
+{"t_ms": 21634.4, "kind": "eou", "turn": 2, "data": {"speech_end_at_ms": 21057.3, "hangover_ms": 576, "audio_ms": 4416, "barge_in": false, "merged_from": []}}
+{"t_ms": 21634.4, "kind": "turn_start", "turn": 2, "data": {}}
+{"t_ms": 21634.4, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 21634.6, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 22435.0, "kind": "filler", "turn": 2, "data": {"after_ms": 800.0}}
+{"t_ms": 22435.2, "kind": "playback_start", "turn": 2, "data": {"kind": "filler", "play_id": 3, "name": null, "at_ms": 22435.1}}
+{"t_ms": 22435.3, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 24857.6, "kind": "playback_item_done", "turn": 2, "data": {"kind": "filler"}}
+{"t_ms": 24857.6, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 25634.9, "kind": "provider_error", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1, "error": "groq-whisper: timed out after 4s", "retryable": true, "latency_ms": 4000.2}}
+{"t_ms": 25634.9, "kind": "provider_fallback", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "to": "local-whisper", "error": "groq-whisper: timed out after 4s", "retryable": true}}
+{"t_ms": 25634.9, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "local-whisper", "attempt": 1}}
+{"t_ms": 35636.1, "kind": "provider_error", "turn": null, "data": {"kind": "stt", "provider": "local-whisper", "attempt": 1, "error": "local-whisper: timed out after 10s", "retryable": true, "latency_ms": 10001.1}}
+{"t_ms": 35636.2, "kind": "stt_failed", "turn": 2, "data": {"error": "STTError: fallback-stt: all STT providers failed: groq-whisper:timeout, local-whisper:timeout"}}
+{"t_ms": 35636.2, "kind": "turn_end", "turn": 2, "data": {"outcome": "stt_failed", "wall_ms": 14003, "error": "STTError: fallback-stt: all STT providers failed: groq-whisper:timeout, local-whisper:timeout"}}
+{"t_ms": 35636.2, "kind": "canned", "turn": 2, "data": {"name": "didnt_catch"}}
+{"t_ms": 35636.2, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 35636.4, "kind": "playback_start", "turn": 2, "data": {"kind": "canned", "play_id": 3, "name": "didnt_catch", "at_ms": 35636.3}}
+{"t_ms": 35636.4, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 39860.4, "kind": "playback_item_done", "turn": 2, "data": {"kind": "canned"}}
+{"t_ms": 39860.4, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 39860.4, "kind": "playback_done", "turn": 2, "data": {"play_id": 3}}
+{"t_ms": 40278.6, "kind": "fault_cleared", "turn": null, "data": {"target": "stt"}}
+{"t_ms": 40699.7, "kind": "inject", "turn": null, "data": {"step": 6, "clip": "order_status_query", "kind": "say", "real": true, "path": "demo/clips/real/order_status_query.wav", "duration_ms": 4256, "text": "Hi, where is my order PN-10002?"}}
+{"t_ms": 41185.4, "kind": "speech_start", "turn": null, "data": {"segment": 3, "onset_ms": 40961.3, "during_answer": false}}
+{"t_ms": 41185.4, "kind": "state", "turn": null, "data": {"state": "user_speaking"}}
+{"t_ms": 45410.0, "kind": "speech_end", "turn": null, "data": {"segment": 3, "speech_end_at_ms": 44833.3, "voiced_ms": 3808.0, "utterance_ms": 4384, "forced": false}}
+{"t_ms": 45410.1, "kind": "eou", "turn": 3, "data": {"speech_end_at_ms": 44833.3, "hangover_ms": 576, "audio_ms": 4384, "barge_in": false, "merged_from": []}}
+{"t_ms": 45410.1, "kind": "turn_start", "turn": 3, "data": {}}
+{"t_ms": 45410.1, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 45410.3, "kind": "provider_attempt", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "attempt": 1}}
+{"t_ms": 46080.8, "kind": "provider_ok", "turn": null, "data": {"kind": "stt", "provider": "groq-whisper", "latency_ms": 670.4}}
+{"t_ms": 46081.0, "kind": "stt_done", "turn": 3, "data": {"text": "Hi, where is my order PN-10002?", "merged_text": "Hi, where is my order PN-10002?", "provider": "groq-whisper", "attempts": ["groq-whisper:ok"], "stt_ms": 671}}
+{"t_ms": 46214.4, "kind": "filler", "turn": 3, "data": {"after_ms": 800.0}}
+{"t_ms": 46214.6, "kind": "playback_start", "turn": 3, "data": {"kind": "filler", "play_id": 4, "name": null, "at_ms": 46214.5}}
+{"t_ms": 46214.7, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 46682.1, "kind": "reply_ready", "turn": 3, "data": {"text": "Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery.", "intent": "scripted", "blocked": false, "rewritten": false, "trace_id": null}}
+{"t_ms": 46682.2, "kind": "answer_queued", "turn": 3, "data": {"sentences": ["Your order PN-10002, the smart scale, shipped three days ago by BlueDart express. The tracking number is B D 7 7 8 1 2 0 4 I N. BlueDart expects to deliver it in about two days. You'll get an SMS from the courier on the day of delivery."], "behind_filler": true}}
+{"t_ms": 46682.3, "kind": "provider_attempt", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "attempt": 1}}
+{"t_ms": 47825.5, "kind": "tts_first_chunk", "turn": 3, "data": {"at_ms": 47825.4}}
+{"t_ms": 48292.9, "kind": "provider_ok", "turn": null, "data": {"kind": "tts", "provider": "inhouse", "chunks": 5, "ttfc_ms": 1143.1, "latency_ms": 1610.5}}
+{"t_ms": 48637.2, "kind": "playback_item_done", "turn": 3, "data": {"kind": "filler"}}
+{"t_ms": 48637.2, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 48637.3, "kind": "playback_start", "turn": 3, "data": {"kind": "answer", "play_id": 4, "name": null, "at_ms": 48637.1}}
+{"t_ms": 48637.3, "kind": "state", "turn": null, "data": {"state": "speaking"}}
+{"t_ms": 68688.0, "kind": "playback_item_done", "turn": 3, "data": {"kind": "answer"}}
+{"t_ms": 68688.1, "kind": "state", "turn": null, "data": {"state": "thinking"}}
+{"t_ms": 68688.1, "kind": "playback_done", "turn": 3, "data": {"play_id": 4}}
+{"t_ms": 68688.1, "kind": "turn_end", "turn": 3, "data": {"outcome": "answered", "wall_ms": 23279, "answer_played_ms": 20047}}
+{"t_ms": 68688.2, "kind": "state", "turn": null, "data": {"state": "listening"}}
+{"t_ms": 70626.5, "kind": "vad_stats", "turn": null, "data": {"frames": 2207, "vad_ms_mean": 0.77, "vad_ms_p95": 1.214, "vad_ms_max": 21.193, "max_frame_lag_ms": 11.1}}
+{"t_ms": 70626.5, "kind": "call_end", "turn": null, "data": {"outcomes": {"1": "tts_failed", "2": "stt_failed", "3": "answered"}, "violations": []}}

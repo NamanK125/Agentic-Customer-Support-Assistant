@@ -10,6 +10,7 @@ import wave
 
 import pytest
 
+from support_assistant.voice import scenario
 from support_assistant.voice.audio import write_wav
 from support_assistant.voice.scenario import (
     SCENARIOS_DIR,
@@ -63,7 +64,9 @@ def test_scenario_offline_meets_its_expectations(path, vad):
     assert not failed, failed
 
 
-def test_run_writes_all_outputs(tmp_path):
+def test_run_writes_all_outputs(tmp_path, monkeypatch):
+    # pin to the synthetic clips, whatever has been recorded locally
+    monkeypatch.setattr(scenario, "CLIPS_REAL", tmp_path / "no-real-clips")
     spec = json.loads((SCENARIOS_DIR / "03_real_interruption.json").read_text())
     opts = RunOptions(providers="fake", vad="energy", responder="scripted", out_root=tmp_path)
     r = run_virtual(run_scenario(spec, opts))

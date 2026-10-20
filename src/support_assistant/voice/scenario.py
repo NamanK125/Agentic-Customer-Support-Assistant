@@ -323,8 +323,11 @@ class Clip:
 
 
 def resolve_clip(
-    name: str, *, real_dir: Path = CLIPS_REAL, synth_dir: Path = CLIPS_SYNTHETIC
+    name: str, *, real_dir: Path | None = None, synth_dir: Path | None = None
 ) -> Clip:
+    """A real recording when one exists, else the synthetic clip."""
+    real_dir = real_dir or CLIPS_REAL
+    synth_dir = synth_dir or CLIPS_SYNTHETIC
     kind, text = CLIPS.get(name, ("say", name))
     for d, real in ((real_dir, True), (synth_dir, False)):
         p = d / f"{name}.wav"

@@ -1,0 +1,157 @@
+{
+  "scenario": "03_real_interruption",
+  "description": "Required #3, end to end (pipeline): 'Wait, wrong order. I meant PN-10005.' 1.5 s into the order-status answer must duck, confirm, cut playback, and become exactly one new turn that is answered. (`replies` are used only when run with --responder scripted.)",
+  "providers": "real",
+  "provider_chain": {
+    "stt": [
+      "groq-whisper",
+      "local-whisper"
+    ],
+    "tts": [
+      "inhouse",
+      "edge"
+    ],
+    "canned": {
+      "didnt_catch": "cache:inhouse",
+      "one_moment": "cache:inhouse",
+      "trouble": "cache:inhouse"
+    }
+  },
+  "vad": "silero",
+  "responder": "pipeline (build_pipeline, voice)",
+  "clips": {
+    "order_status_query": {
+      "path": "demo/clips/real/order_status_query.wav",
+      "real": true
+    },
+    "wait_wrong_order": {
+      "path": "demo/clips/real/wait_wrong_order.wav",
+      "real": true
+    }
+  },
+  "all_clips_real": true,
+  "config": {
+    "endpointer": {
+      "threshold": 0.5,
+      "neg_threshold": 0.35,
+      "min_speech_ms": 250.0,
+      "hangover_ms": 560.0,
+      "pre_roll_ms": 320.0,
+      "tail_ms": 160.0,
+      "max_utterance_ms": 15000.0
+    },
+    "barge_in": {
+      "threshold": 0.5,
+      "duck_ms": 160.0,
+      "confirm_ms": 560.0,
+      "window_ms": 1200.0,
+      "unduck_after_ms": 320.0,
+      "duck_gain": 0.3
+    },
+    "session_id": "voice-03_real_interruption-1b4352",
+    "filler_after_ms": 800.0,
+    "stt_timeout_s": 20.0,
+    "responder_timeout_s": 40.0,
+    "greeting_timeout_s": 10.0,
+    "tts_first_chunk_timeout_s": 12.0,
+    "tts_chunk_timeout_s": 10.0,
+    "sink_slack_s": 2.0,
+    "stop_timeout_s": 1.0,
+    "merge_gap_ms": 200.0,
+    "split_replies": false
+  },
+  "config_overrides": {},
+  "setup_events": [],
+  "passed": true,
+  "expectations": [
+    {
+      "name": "turns",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "barge_in_on_answer",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "interrupted",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "turns_completed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "no_duplicate_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "no_dropped_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "coordinator_errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "metrics": {
+    "greeting": null,
+    "turns": 2,
+    "turns_answered": 2,
+    "turns_completed": 1,
+    "interrupted": 1,
+    "merged": 0,
+    "outcomes": [
+      "interrupted",
+      "answered"
+    ],
+    "barge_in_confirmed": 1,
+    "barge_in_on_answer": 1,
+    "ducks": 1,
+    "unducks": 0,
+    "utterances_ignored": 0,
+    "vad_rejected": 0,
+    "fillers": 2,
+    "stale_dropped": 0,
+    "replies_held": 0,
+    "canned": [],
+    "stt_providers": [
+      "groq-whisper",
+      "groq-whisper"
+    ],
+    "stt_texts": [
+      "Hi, where is my order PN-10002?",
+      "Wait, wrong order. I mean PN-10005."
+    ],
+    "fallback_used": [],
+    "tts_providers_ok": [
+      "inhouse"
+    ],
+    "tts_failed": 0,
+    "stt_failed": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "dropped_turns": [],
+    "max_turn_wall_ms": 36205.5,
+    "max_time_to_resolution_ms": 6870.200000000001,
+    "coordinator_errors": 0,
+    "invariant_violations": 0,
+    "timed_out": false,
+    "runner_error": [],
+    "call_s": 55.09,
+    "wall_s": 55.09
+  }
+}

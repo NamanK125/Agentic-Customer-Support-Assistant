@@ -65,19 +65,29 @@ what is still open.
 ## Voice: barge-in, endpointing, state
 
 14. **Backchannel rejection rests on a thin margin.** "Uh-huh" over hum confirmed a barge-in 11/11
-    times at 480 ms and 0/11 at 560 ms (shipped). Tuned on one synthetic voice; a drawn-out
+    times at 480 ms and 0/11 at 560 ms (shipped). Tuned on one synthetic voice and confirmed on
+    only one real "Uh-huh." recording; a drawn-out
     "mmm-hmm" over noise will still cut the assistant off. *Why not fixed:* the robust fix needs
     streaming ASR to classify backchannels by content, plus resuming a cut reply.
 15. **A cough over the "one moment" filler restarts the LLM call** (6–12 s), because speech over
     the filler is treated as a real utterance. *Deliberate:* the opposite policy silently dropped
     "PN-10005" said over the filler in the stage sweep.
-16. **An interrupted reply stays in history in full.** The caller heard 2.3 s of a 14.3 s reply
+16. **An interrupted reply stays in history in full.** The caller heard 2.3 s of a 23.9 s reply
     (scenario 03), but session history holds all of it, so a later turn may assume the caller heard
     it. *Why not fixed:* needs a deferred-save/rollback API in the pipeline.
 17. **Spoken order ids depend on the STT getting digits right.** Local whisper heard "PN-10002" as
-    "PN1002" in the first live call. A vocabulary prompt fixed it on our three test clips. It is
-    still a single point of failure for accents and noisy lines; the fallback is the agent asking
-    again.
+    "PN1002" in the first live call, and Groq's whisper-large-v3-turbo dropped a digit from every
+    id on our real recordings, even with the vocabulary prompt. Full whisper-large-v3 with the
+    prompt gets our three clips right. It is still a single point of failure for accents and
+    noisy lines; the fallback is the agent asking again. A spoken-digit confirmation ("that's
+    P N one zero zero zero two, right?") would close it at the cost of a turn.
+
+20. **The voice scenarios check turn-taking, not answer content.** On the first Groq run with real
+    recordings, Whisper turbo heard every order id with a digit missing and the agent asked for
+    the id again, yet all 12 scenarios passed: they assert barge-in, no dropped/duplicate turns
+    and no hangs, not that the answer was right. *Why not fixed:* asserting answers needs a
+    per-scenario expected-content check (e.g. "reply mentions PN-10005"), which ties the voice
+    tests to LLM wording. We caught it by reading transcripts, which doesn't scale.
 
 ## Capacity
 
@@ -89,7 +99,8 @@ what is still open.
 
 ## Process caveat
 
-18. **All voice scenario runs use synthetic caller audio** (TTS-generated speech, synthesized
-    noise). Every `result.json` records `all_clips_real: false`. The brief requires real
-    recordings; barge-in thresholds and latency must be re-run on them
-    (`scripts/record_clips.py`).
+18. **The voice evidence is one speaker on one laptop mic.** All 12 scenario runs now use real
+    recordings (`all_clips_real: true`), but of a single speaker in one room. Barge-in thresholds,
+    hangover and the order-id transcription have not been checked across accents, phone-line
+    audio (8 kHz, codec artefacts) or noisy rooms. *Why not fixed:* needs more speakers and a
+    telephony path, not code.

@@ -112,42 +112,49 @@ drives tools. That is two STT costs per turn, but the tool-driving text is the a
 
 Instrumented, not estimated. The clock starts at **the end of the caller's last voiced 32 ms
 frame** (not at the end-of-utterance decision), so the hangover we wait for is counted. Run:
-`demo/runs/10_latency_run/20261019-131903-final/latency.json`, 10 turns, real providers (in-house
-TTS, local faster-whisper int8 because no Groq key was configured, in-house
-`Qwen3.8-27B-AWQ-INT4` LLM), Silero VAD, **synthetic caller clips**.
+`demo/runs/10_latency_run/20261020-100303-groq/latency.json`, 10 turns, **real recorded caller
+clips**, Groq Whisper `whisper-large-v3`, Groq LLMs (router `gpt-oss-20b`, guards `gpt-oss-120b`,
+agent `qwen3.8-27b`), in-house streaming TTS, Silero VAD.
 
 | | p50 | p95 |
 |---|---|---|
-| End of speech → first audio (the "one moment" filler) | **1377 ms** | 1379 ms |
-| End of speech → first **answer** audio | **10635 ms** | 16431 ms |
+| End of speech → first audio (the "one moment" filler) | **1381 ms** | 1387 ms |
+| End of speech → first **answer** audio | **5316 ms** | 6546 ms |
 | Stage: hangover (silence needed to declare end of utterance) | 576 | 576 |
-| Stage: STT (local whisper fallback; Groq not configured) | 2123 | 2455 |
-| Stage: LLM (text pipeline: guard, router, agent, output guard) | 6958 | 12660 |
-| Stage: TTS first chunk (whole reply in one request) | 986 | 2373 |
-| Stage: playout | 0.2 | 0.3 |
+| Stage: STT (Groq whisper-large-v3) | 669 | 761 |
+| Stage: LLM (text pipeline: guard, router, agent, output guard) | 2755 | 4066 |
+| Stage: TTS first chunk (whole reply in one request) | 1273 | 1471 |
+| Stage: playout | 0.3 | 0.4 |
 
 Why the number is what it is:
 
-- **The LLM is ~65% of answer latency.** The in-house server decodes at ~10 tokens/s and a turn
-  makes 3–4 sequential LLM calls (input guard, router, agent, output rubric). That is the lever:
-  a fast hosted model (Groq) or a smaller router/guard model cuts it most. Removing the router's
-  unused free-text rationale already saved ~3 s per turn.
-- **STT is 2.1 s only because Groq has no key here**, so every turn pays a 0 ms failed attempt and
-  then local CPU whisper. Groq Whisper on a short clip would be well under 1 s.
+- **The LLM is ~52% of answer latency** (2.8 s): a turn is 4–5 sequential calls (input guard,
+  router, agent with a tool call and a final answer, output rubric) at 0.3–0.7 s each on Groq.
+  The levers are fewer sequential calls (run the input guard and router in parallel; skip the
+  output rubric when the structural check already passed on confirmed fields) rather than a
+  faster model. For comparison, the same run on our in-house server (~10 tokens/s) was 10.6 s,
+  with the LLM at 7 s.
+- **STT 0.67 s.** We use full `whisper-large-v3`, not turbo, at the same Groq latency: on our real
+  recordings turbo dropped a digit from every spoken order id ("PN-10002" → "PN-1002", 3/3 clips),
+  and large-v3 with the vocabulary prompt got 3/3 right.
 - **Hangover 576 ms** is fixed (§1). A sweep found 320 ms split a real sentence; the cut-off risk
   outweighs ~250 ms.
-- **TTS first chunk ~1 s.** Sending the whole reply as one request (one TTS session keeps the voice
-  continuous) costs ~350 ms more than per-sentence requests (p50 650 → 986 ms). We chose voice
-  continuity.
+- **TTS first chunk ~1.3 s.** Sending the whole reply as one request (one TTS session keeps the
+  voice continuous) costs ~350 ms more than per-sentence requests. We chose voice continuity.
 - **The filler is why the caller hears something at 1.4 s.** We report both numbers because they
   answer different questions: "did the line acknowledge me?" (1.4 s) and "when did I get my
-  answer?" (10.6 s). We don't present the first as the second.
+  answer?" (5.3 s). We don't present the first as the second.
+- **Rate limits are part of latency on the free tier.** Groq caps each model at 8k tokens/min and
+  a turn is ~3k tokens, which is why roles are spread across three models. Past that budget,
+  calls fail fast into the deterministic fallbacks rather than wait.
 
-Silero VAD costs 0.6–1.0 ms mean per 32 ms frame (p95 1.2 ms); maximum frame lag in the control
-loop was 34 ms.
+Silero VAD costs 0.73 ms mean per 32 ms frame (p95 1.1 ms, 11,296 frames); maximum frame lag in
+the control loop was 7.9 ms.
 
-Barge-in reaction (from the tuning sweep, synthetic voice): caller starts "wait, wrong order" →
-playback cut at p50 ~784 ms after the clip starts (duck at 160 ms of speech, confirm at 560 ms).
+Barge-in reaction on the real recordings: caller starts "wait, wrong order" → playback cut
+760–840 ms later (scenarios 03, 06, 12: duck at 160 ms of speech, confirm at 560 ms). A real
+clap and real keyboard typing caused no duck at all; a real "Uh." and "Uh-huh." ducked and
+resumed.
 
 
 ## 6. Known failure cases (not fixed)
@@ -156,11 +163,12 @@ Found in the scenario runs and tuning sweeps; full list in [`red_team.md`](red_t
 
 1. **Backchannel rejection rests on a thin, voice-specific margin.** "Uh-huh" over background hum
    confirmed a barge-in 11/11 times at a 480 ms confirm threshold and 0/11 at 560 ms; we ship
-   560. That margin was measured on one synthetic voice; a drawn-out "mmm-hmm" will still cut the
-   assistant off. The robust fix is a transcript-based backchannel classifier with resume-after-cut
-   (streaming ASR, §3). Not built.
+   560. That margin was tuned on one synthetic voice and has since held on one real speaker's
+   "Uh-huh." (one recording); a drawn-out "mmm-hmm" will still cut the assistant off. The
+   robust fix is a transcript-based backchannel classifier with resume-after-cut (streaming
+   ASR, §3). Not built.
 2. **Speech at the very end of an answer, or over the filler, always becomes a turn.** A cough over
-   "one moment" cancels and restarts the 6–12 s LLM call. Deliberate: the opposite policy dropped
+   "one moment" cancels and restarts the 2–4 s LLM call. Deliberate: the opposite policy dropped
    real short utterances ("PN-10005" said over the filler) in the stage sweep.
 3. **An interrupted reply stays in session history in full**, although the caller heard only part
    of it. The pipeline saves the reply before playback; fixing it needs a deferred-save API.
@@ -168,6 +176,6 @@ Found in the scenario runs and tuning sweeps; full list in [`red_team.md`](red_t
    headphones, or the assistant's own voice is heard as a barge-in.
 5. **Fixed hangover.** Hesitant speech (reading out digits) can split into two segments. They are
    merged, so no turn is lost, but the merge costs an STT/LLM restart.
-6. **All runs use synthetic caller audio.** Thresholds must be re-checked on real recordings
-   (`scripts/record_clips.py` → `demo/clips/real/`, which the runner prefers automatically).
-
+6. **One speaker, one room.** The scenario runs use real recordings, but of one speaker on a
+   laptop mic. Thresholds (VAD, duck/confirm, hangover) have not been checked across accents,
+   phone-line audio or noisy rooms (§1.4).

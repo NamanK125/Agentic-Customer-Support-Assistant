@@ -1,0 +1,155 @@
+{
+  "scenario": "02_noise_burst_no_interrupt",
+  "description": "Required #2 (scripted responder: isolates barge-in from LLM latency): a 120 ms clap 1.2 s into the answer must not duck or interrupt it.",
+  "providers": "real",
+  "provider_chain": {
+    "stt": [
+      "groq-whisper",
+      "local-whisper"
+    ],
+    "tts": [
+      "inhouse",
+      "edge"
+    ],
+    "canned": {
+      "didnt_catch": "cache:inhouse",
+      "one_moment": "cache:inhouse",
+      "trouble": "cache:inhouse"
+    }
+  },
+  "vad": "silero",
+  "responder": "scripted",
+  "reply_latency_ms": 600,
+  "clips": {
+    "order_status_query": {
+      "path": "demo/clips/real/order_status_query.wav",
+      "real": true
+    },
+    "noise_burst": {
+      "path": "demo/clips/real/noise_burst.wav",
+      "real": true
+    }
+  },
+  "all_clips_real": true,
+  "config": {
+    "endpointer": {
+      "threshold": 0.5,
+      "neg_threshold": 0.35,
+      "min_speech_ms": 250.0,
+      "hangover_ms": 560.0,
+      "pre_roll_ms": 320.0,
+      "tail_ms": 160.0,
+      "max_utterance_ms": 15000.0
+    },
+    "barge_in": {
+      "threshold": 0.5,
+      "duck_ms": 160.0,
+      "confirm_ms": 560.0,
+      "window_ms": 1200.0,
+      "unduck_after_ms": 320.0,
+      "duck_gain": 0.3
+    },
+    "session_id": "voice-02_noise_burst_no_interrupt-588110",
+    "filler_after_ms": 800.0,
+    "stt_timeout_s": 20.0,
+    "responder_timeout_s": 40.0,
+    "greeting_timeout_s": 10.0,
+    "tts_first_chunk_timeout_s": 12.0,
+    "tts_chunk_timeout_s": 10.0,
+    "sink_slack_s": 2.0,
+    "stop_timeout_s": 1.0,
+    "merge_gap_ms": 200.0,
+    "split_replies": false
+  },
+  "config_overrides": {},
+  "setup_events": [],
+  "passed": true,
+  "expectations": [
+    {
+      "name": "turns",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "turns_completed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "barge_in_confirmed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "interrupted",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "no_duplicate_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "no_dropped_turns",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "coordinator_errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "metrics": {
+    "greeting": null,
+    "turns": 1,
+    "turns_answered": 1,
+    "turns_completed": 1,
+    "interrupted": 0,
+    "merged": 0,
+    "outcomes": [
+      "answered"
+    ],
+    "barge_in_confirmed": 0,
+    "barge_in_on_answer": 0,
+    "ducks": 0,
+    "unducks": 0,
+    "utterances_ignored": 0,
+    "vad_rejected": 0,
+    "fillers": 1,
+    "stale_dropped": 0,
+    "replies_held": 0,
+    "canned": [],
+    "stt_providers": [
+      "groq-whisper"
+    ],
+    "stt_texts": [
+      "Hi, where is my order PN-10002?"
+    ],
+    "fallback_used": [],
+    "tts_providers_ok": [
+      "inhouse"
+    ],
+    "tts_failed": 0,
+    "stt_failed": 0,
+    "no_duplicate_turns": true,
+    "no_dropped_turns": true,
+    "dropped_turns": [],
+    "max_turn_wall_ms": 23267.0,
+    "max_time_to_resolution_ms": 3226.4000000000005,
+    "coordinator_errors": 0,
+    "invariant_violations": 0,
+    "timed_out": false,
+    "runner_error": [],
+    "call_s": 30.64,
+    "wall_s": 30.64
+  }
+}

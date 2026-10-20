@@ -67,10 +67,21 @@ async def test_think_block_is_stripped_and_thinking_disabled():
         seen.update(kw)
         return _resp("We need to say OK.\n</think>\n\nOK")
 
-    client = _client(create, llm_disable_thinking=True)
+    client = _client(create, llm_disable_thinking=True, llm_reasoning_effort=None)
     out = await client.chat([{"role": "user", "content": "hi"}])
     assert out.content == "OK"
     assert seen["extra_body"] == {"chat_template_kwargs": {"enable_thinking": False}}
+
+
+async def test_groq_reasoning_effort_is_sent_without_vllm_fields():
+    seen = {}
+
+    async def create(**kw):
+        seen.update(kw)
+        return _resp("OK")
+
+    await _client(create).chat([{"role": "user", "content": "hi"}])
+    assert seen["extra_body"] == {"reasoning_effort": "none"}  # Groq 400s on chat_template_kwargs
 
 
 async def test_client_errors_do_not_trip_the_breaker():
@@ -98,3 +109,31 @@ async def test_outage_opens_breaker_then_fails_fast():
             await c.chat([{"role": "user", "content": "hi"}])
     assert c._breaker.is_open
     assert calls == 2  # calls 3 and 4 never reached the network
+
+
+async def test_gpt_oss_gets_its_lowest_reasoning_effort():
+    seen = {}
+
+    async def create(**kw):
+        seen.update(kw)
+        return _resp("OK")
+
+    c = _client(create, llm_model_router="openai/gpt-oss-20b")
+    await c.chat([{"role": "user", "content": "hi"}], role="router")
+    assert seen["model"] == "openai/gpt-oss-20b"
+    assert seen["extra_body"] == {"reasoning_effort": "low"}  # "none" is a 400 on gpt-oss
+
+
+async def test_breakers_are_per_model():
+    async def create(**kw):
+        if kw["model"] == "throttled":
+            raise RuntimeError("429")
+        return _resp("OK")
+
+    c = _client(create, llm_model="ok-model", llm_model_router="throttled")
+    for _ in range(3):
+        with pytest.raises(LLMError):
+            await c.chat([{"role": "user", "content": "x"}], role="router")
+    assert c._breaker_for("throttled").is_open
+    out = await c.chat([{"role": "user", "content": "x"}], role="agent")  # other model unaffected
+    assert out.content == "OK"
