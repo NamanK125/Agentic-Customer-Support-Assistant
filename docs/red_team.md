@@ -91,11 +91,13 @@ what is still open.
 
 ## Capacity
 
-19. **At 12 concurrent turns the in-house LLM can't meet the guard and router budgets.** In the
-    text eval, 63/180 routes fell back to keyword rules and the input guard ran heuristics-only on
-    146/162 rows. Nothing failed or hung, but routing accuracy (80%) and generic injection recall
-    (12%) in that run reflect the degraded path. *Why not fixed:* it needs model capacity (smaller
-    per-role models, a faster provider) or admission control, not code.
+19. **A free-tier daily token cap silently turns the guard into its heuristic fallback.** During the
+    Groq eval the guard model (`gpt-oss-120b`, 200k tokens/day) ran out mid-run; from then on
+    every guard check, including live calls, ran heuristics-only, where generic injection recall
+    is 5%. Nothing failed or hung, and the degraded mode is visible in traces and metrics, but no
+    alert fires. Earlier, the in-house server showed the same at 12 concurrent turns (63/180
+    routes degraded). *Why not fixed:* it needs capacity (paid tier, more keys) and an alert on
+    the heuristic-only rate, not code in the request path.
 
 ## Process caveat
 

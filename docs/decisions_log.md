@@ -300,3 +300,7 @@ Format:
   - Filler delay 0.8 s -> 3 s, at the caller's request: at 0.8 s "one moment" played on nearly every turn, including after "hello". The measured first-audio figure (1.4 s) is from the 0.8 s configuration.
   - The filler is also skipped for small talk.
   UNSURE: A short "stop" (~300-400 ms) during a reply still can't interrupt: barge-in needs 560 ms of speech, which is what keeps "uh-huh" from cutting the assistant off. Fixing it needs the words, i.e. streaming ASR (design note B §3). Voice replies are also too long (25-30 s for a return answer); not yet fixed.
+
+[2026-10-20 12:00] FINDING: Text eval on Groq (router gpt-oss-20b, guard gpt-oss-120b; 2 in flight, paced to 10 rows/min): routing 85.0% (return_refund recall 58%), 3/180 routes degraded, classifier cache 94.4% on the repeat pass.
+  The guard numbers from the same run are not LLM-guard numbers: gpt-oss-120b hit Groq's 200k tokens/day cap during the routing passes (which run the guard on every row), so the guard sets ran heuristics-only (118/120, 41/42). Reported as the deterministic layer's numbers (PulseNest recall 83.3% / FPR 5.6%; deepset recall 5%), i.e. what an LLM outage looks like.
+  ABANDONED: Re-running the guard sets today on another model or a second key. It would have measured a different setup than shipped or cost time before the deadline; the eval can now run the guard part alone (--only guards).

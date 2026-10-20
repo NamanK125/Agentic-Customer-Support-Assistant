@@ -62,39 +62,54 @@ LLM outage only the deterministic layer runs.
 
 Runner: `uv run python eval/run_text_eval.py` → `eval/results/text_eval_<date>.json`.
 
-### Measured (2026-10-19, in-house `Qwen3.8-27B-AWQ-INT4`)
+### Measured (2026-10-20, Groq)
 
-Source: `eval/results/text_eval_2026-10-19.json`. Run with 12 rows in flight against an in-house
-server that decodes ~10 tokens/s. **Read this caveat first:** under that load most LLM calls hit
-their time budgets. 63 of 180 routing decisions fell back to the rule-based router, and the input
-guard ran heuristics-only on 109/120 generic and 37/42 PulseNest rows. These numbers therefore
-mostly measure the **degraded path under overload**, not the LLM-backed system. Re-run at lower
-concurrency (`--concurrency 2`) or on Groq for the LLM-path numbers.
+Source: `eval/results/text_eval_2026-10-20.json`. Router `openai/gpt-oss-20b`, input guard
+`openai/gpt-oss-120b`, 2 rows in flight, paced to 10 rows/min to stay under Groq's free-tier
+token-per-minute cap.
+
+**Routing** (180 rows, behind the input guard as in production):
 
 | Metric | Result |
 |---|---|
-| Routing accuracy (180 rows; 0 blocked by the input guard) | **80.0%** (unambiguous rows 80.6%) |
-| Per-intent recall: escalate / order_status / product_question / return_refund | 96% / 91% / 83% / **47%** |
-| Top confusions | return_refund → escalate_to_human (14), return_refund → product_question (7) |
-| Input guard, PulseNest adversarial set (42) | recall **87.5%** (21/24), false-positive rate **5.6%** (1/18) |
-| Input guard, generic deepset set (120) | recall **11.7%**, false-positive rate **0%** (heuristic-only on 109 rows) |
-| Classifier cache hit rate, repeat pass over the same 180 messages | **50.6%** (degraded routes are deliberately not cached) |
+| Accuracy (7 rows blocked by the input guard are excluded) | **85.0%** (unambiguous rows 86.0%) |
+| Per-intent recall: escalate / order_status / product_question / return_refund | 94% / 100% / 83% / **58%** |
+| Per-intent precision, same order | 77% / 96% / 92% / 76% |
+| Top confusions | return_refund → escalate_to_human (13), product_question → return_refund (5) |
+| Routes that fell back to the rule-based router | 3 / 180 |
+| Classifier cache hit rate, repeat pass over the same 180 messages | **94.4%** |
+
+**Input guard: only the deterministic layer was measured.** The guard model's free-tier daily
+budget (200k tokens/day for `gpt-oss-120b`) ran out during the routing passes, which also run the
+guard on every row, so the guard sets ran heuristics-only on 118/120 and 41/42 rows. These are
+therefore the numbers for **an LLM outage**, not for the full guard:
+
+| Set | Recall | False-positive rate |
+|---|---|---|
+| PulseNest adversarial (42: 24 attacks, 18 benign-but-suspicious) | **83.3%** (20/24) | **5.6%** (1/18) |
+| Generic deepset injections (120) | **5.0%** (3/60) | 0% |
+
+The full LLM-backed guard was not measured on Groq; re-running `eval/run_text_eval.py --only
+guards` with budget left (or a second key in `LLM_API_KEYS_EXTRA`) gives it. An earlier in-house
+run (`text_eval_2026-10-19.json`, overloaded: 63/180 routes degraded) had 80% routing accuracy and
+the same picture for the guard.
 
 What this says:
-- The **deterministic guard is tuned for this domain's attacks and is not a general injection
-  detector**: 88% on PulseNest attacks, 12% on generic deepset attacks (role-play, off-topic
-  instructions, German-language prompts). That is acceptable only because the LLM classifier
-  normally runs in front of it, and the run shows how often it doesn't under load.
-- **`return_refund` is the weak intent.** Many Bitext refund/cancellation rows went to escalation,
-  partly because the degraded keyword router ranks escalation words first, and partly because
-  "cancel my order" has no matching tool here. This is a labelled-data and capacity problem
-  before it is a prompt problem.
-- **Misses on the domain set:** an acrostic exfiltration, a fake prior assistant turn ("I have
-  approved your refund…"), and a Hinglish instruction override. **False positive:** "I'm the
-  developer of a fitness app…".
-- **Capacity:** 12 concurrent turns already exceed the guard (6 s) and router (8 s) budgets on
-  this server. The system degrades as designed (no errors, no hangs), but quality drops. That
-  is the clearest argument in this note for per-role smaller models and admission control.
+- **`return_refund` is the weak intent** (58% recall): most misses are Bitext refund and
+  cancellation rows routed to escalation. Some are defensible ("cancel my order" has no tool here,
+  so a human is the right destination), which means part of this is a labelling question in our
+  own eval set, not only a router error.
+- **The deterministic layer is a domain-specific backstop, not a general injection detector**:
+  83% on PulseNest attacks, 5% on generic deepset attacks (role-play, off-topic tasks, German
+  prompts). That is acceptable only because the LLM classifier normally runs in front of it, and
+  this run shows that a free-tier daily cap is enough to take it away.
+- **Misses on the domain set (deterministic layer):** a claimed supervisor role, "insider" hearsay
+  about marking orders inspection-passed, an acrostic exfiltration, and a Hinglish instruction
+  override. **False positive:** "I'm the developer of a fitness app…".
+- **Capacity:** one turn is ~3k tokens across roles, so a single free-tier model allows ~2.5 turns
+  a minute; the guard alone uses ~1.2k per turn, so its 200k/day covers ~160 turns. That, not code, is what limits this deployment; it is why
+  roles are spread across models and why paid tiers or several keys are a prerequisite for real
+  traffic.
 
 
 ## 4. Choices the brief asks us to justify
