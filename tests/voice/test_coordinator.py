@@ -622,7 +622,10 @@ def test_second_utterance_at_every_stage_never_doubles_or_drops(second_ms, stt_m
             ["Short answer here. And a second sentence too."], latency_ms=1400
         )
         async with Call(
-            responder=responder, tts=FakeTTS(first_chunk_ms=400), stt=FakeSTT(latency_ms=stt_ms)
+            responder=responder,
+            tts=FakeTTS(first_chunk_ms=400),
+            # a real question: a bare "hello" (FakeSTT's default) now skips the filler
+            stt=FakeSTT(text="where is my order", latency_ms=stt_ms),
         ) as c:
             c.say(speech(1000))
             await c.wait_event("speech_start")
@@ -693,6 +696,21 @@ def test_no_filler_when_reply_is_fast():
         assert tl.first_audio_played == tl.first_answer_audio_played
         b = tl.breakdown()
         assert b["tts"] == pytest.approx(150, abs=40)
+
+    go(main)
+
+
+def test_no_filler_for_small_talk_even_when_reply_is_slow():
+    async def main():
+        responder = ScriptedResponder(["Hi, how can I help?"], latency_ms=2500)
+        stt = FakeSTT(text="Hello.", latency_ms=300)
+        async with Call(responder=responder, stt=stt) as c:
+            c.say(speech(1000))
+            await c.wait_event("turn_end", outcome="answered")
+            await c.idle()
+        assert [e.data["kind"] for e in c.of("playback_start")] == ["answer"]
+        assert [e.data["reason"] for e in c.of("filler_skipped")] == ["small talk"]
+        assert_invariants(c)
 
     go(main)
 

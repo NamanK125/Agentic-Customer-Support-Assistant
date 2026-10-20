@@ -42,6 +42,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any, Literal, Protocol
 
+from support_assistant.harness import smalltalk
 from support_assistant.voice.contracts import (
     STT,
     TTS,
@@ -780,6 +781,10 @@ class CallCoordinator:
         if turn is None or turn.id != m.turn or turn.phase not in ("stt", "responding"):
             return  # answered (or gone) in time: no filler needed; not worth a stale event
         if self._canned is None or turn.filler_played:
+            return
+        if turn.text is not None and smalltalk.classify(turn.text):
+            # "Hello." gets an instant fixed reply; "one moment, let me check" would be odd
+            self._emit("filler_skipped", turn=turn.id, reason="small talk")
             return
         if self._endpointer.in_speech or self._playback is not None:
             self._emit(
