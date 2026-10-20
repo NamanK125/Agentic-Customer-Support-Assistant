@@ -289,3 +289,8 @@ Format:
 
 [2026-10-20 09:50] FINDING: On the first Groq run with real recordings, whisper-large-v3-turbo dropped a digit from every spoken order id ("PN-10002" -> "PN-1002", 3/3 clips), so the agent asked for the order id again. Every scenario still passed, because the scenarios check turn-taking, not answer content. whisper-large-v3 with the vocabulary prompt got 3/3 right at the same latency (~0.5-0.7 s); without the prompt both models fail. Switched STT_MODEL to whisper-large-v3 and re-ran.
   UNSURE: Three clips from one speaker. The order-id path still depends on STT digits (red-team #17).
+
+[2026-10-20 11:20] FIX: "Hello." on a live call filed a human-support ticket. The router has no intent for small talk, so a greeting fell to the escalate_to_human fallback. Bare greetings, thanks and goodbyes (the whole message, nothing else) now get a fixed reply after the input guard, with no router or LLM call; "Hi, where is my order?" still routes normally.
+  WHY: A ticket per "hello" wastes human time and the agent's credibility, and costs an LLM call for nothing.
+  ALTERNATIVES CONSIDERED: A fifth "small_talk" intent in the router (one more LLM decision for a case a regex settles exactly; the routing eval would need new rows).
+  UNSURE: The word list is English plus "namaste"; other-language greetings still escalate.

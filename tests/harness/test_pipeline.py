@@ -202,14 +202,14 @@ async def test_rewrite_flag_propagates(spans):
 
 async def test_router_failure_degrades_to_escalation():
     p, parts = build(router=FakeRouter(error=RuntimeError("boom")))
-    reply = await p.handle("s1", "hello")
+    reply = await p.handle("s1", "my cuff is leaking air")
     assert reply.handler == "human" and reply.text == "ticket HT-1"
     assert parts["out"].calls == 1  # escalation reply still goes through the output guard
 
 
 async def test_slow_router_degrades_within_budget():
     p, parts = build(router=FakeRouter(delay=5), timeout=1.5)
-    reply = await asyncio.wait_for(p.handle("s1", "hello"), 2.0)
+    reply = await asyncio.wait_for(p.handle("s1", "my cuff is leaking air"), 2.0)
     assert reply.handler == "human"
 
 
@@ -275,3 +275,25 @@ async def test_full_outage_end_to_end_with_real_harness_components(order_tools):
     assert follow_up.intent is Intent.ORDER_STATUS and "delivered on" in follow_up.text
     human = await p.handle("s2", "let me talk to a person")
     assert human.handler == "escalation" and "HT-" in human.text
+
+
+@pytest.mark.parametrize("text", ["Hello.", "hi there", "Hey!", "Good morning", "thanks", "ok bye"])
+async def test_bare_small_talk_gets_a_reply_not_a_ticket(text):
+    p, parts = build()
+    reply = await p.handle("s1", text)
+    assert reply.handler == "smalltalk" and reply.intent is None
+    assert parts["router"].calls == 0 and parts["human"].seen == []  # no escalation ticket
+    assert len(await parts["sessions"].history("s1")) == 2
+
+
+@pytest.mark.parametrize("text", ["Hi, where is my order PN-10002?", "hello I want a refund"])
+async def test_greeting_with_a_request_is_routed(text):
+    p, parts = build()
+    reply = await p.handle("s1", text)
+    assert reply.handler != "smalltalk" and parts["router"].calls == 1
+
+
+async def test_small_talk_still_goes_through_the_input_guard():
+    p, parts = build(inp=FakeInputGuard(block=True))
+    reply = await p.handle("s1", "hello")
+    assert reply.blocked and parts["router"].calls == 0

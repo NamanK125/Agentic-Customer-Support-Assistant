@@ -34,6 +34,7 @@ from support_assistant.contracts import (
     RouteDecision,
     Router,
 )
+from support_assistant.harness import smalltalk
 from support_assistant.harness.cache import CacheStats
 from support_assistant.harness.registry import HandlerRegistry
 from support_assistant.harness.session import SessionStore
@@ -166,6 +167,17 @@ class SupportPipeline:
         if not isinstance(checked, CheckedMessage):
             raise StageError("input_guard", TypeError(f"returned {type(checked).__name__}"))
 
+        if (kind := smalltalk.classify(checked.text)) is not None:
+            # A bare greeting/thanks/bye has no intent; routing it would fall back to
+            # escalate_to_human and file a ticket for "Hello."
+            span.set_attribute("app.smalltalk", kind)
+            final = FinalReply(
+                session_id=session_id, text=smalltalk.REPLIES[kind], handler="smalltalk",
+                guard_notes=(f"smalltalk:{kind}",),
+            )  # fmt: skip
+            await self._save(span, session_id, text, final.text, budget)
+            return final
+
         try:
             route: RouteDecision = await self._stage(
                 "router",
@@ -197,19 +209,29 @@ class SupportPipeline:
             "handler": final.handler or draft.handler,
         })  # fmt: skip
 
+        await self._save(span, session_id, text, final.text, budget)
+        return final
+
+    async def _save(
+        self,
+        span: trace.Span,
+        session_id: str,
+        user_text: str,
+        reply_text: str,
+        budget: Callable[[], float],
+    ) -> None:
         try:
             await self._stage(
                 "session.save",
                 lambda: self.sessions.append(
                     session_id,
-                    ChatTurn(role="user", text=text),
-                    ChatTurn(role="assistant", text=final.text),
+                    ChatTurn(role="user", text=user_text),
+                    ChatTurn(role="assistant", text=reply_text),
                 ),
                 max(budget(), 1.0),
             )
         except StageError as exc:
             span.add_event("session.save_failed", {"error": str(exc)})
-        return final
 
     async def _stage(self, name: str, fn: Callable[[], Awaitable[T]], timeout_s: float) -> T:
         start = time.perf_counter()
